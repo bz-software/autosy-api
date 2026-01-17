@@ -51,4 +51,15 @@ class User extends Authenticatable
     {
         return 'phone_number';
     }
+
+
+    /**
+     * =============
+     * Relations
+     * =============
+     */
+    public function workshop()
+    {
+        return $this->hasOne(Workshop::class, 'id_user');
+    }
 }

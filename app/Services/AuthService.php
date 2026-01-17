@@ -4,7 +4,6 @@ namespace App\Services;
 use App\DTOs\AuthDTO;
 use App\Exceptions\ServiceException;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Auth as AuthFacades;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService {

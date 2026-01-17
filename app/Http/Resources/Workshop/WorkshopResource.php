@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Auth;
+namespace App\Http\Resources\Workshop;
 
-use App\Http\Resources\User\UserProfileResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthResource extends JsonResource
+class WorkshopResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +15,10 @@ class AuthResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'token' => $this->token ?? null,
-            'user' => new UserProfileResource($this->user) ?? null
+            "id" => $this->id ?? null,
+            "name" => $this->name ?? null,
+            "idUser" => $this->id_user ?? null,
+            "type" => $this->type
         ];
     }
 }

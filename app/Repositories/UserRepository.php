@@ -7,8 +7,14 @@ class UserRepository
 {
     public function __construct(private User $model) {}
 
-    public function getByPhone($phoneNumber){
-        return $this->model::where('phone_number', $phoneNumber)->first();
+    public function getByPhone(string $phoneNumber, bool $withWorkshop = false)
+    {
+        return $this->model
+            ->when($withWorkshop, function ($query) {
+                $query->with('workshop');
+            })
+            ->where('phone_number', $phoneNumber)
+            ->first();
     }
 }
 
