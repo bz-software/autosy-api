@@ -16,5 +16,9 @@ class UserRepository
             ->where('phone_number', $phoneNumber)
             ->first();
     }
+
+    public function create($user){
+        return $this->model->create($user);
+    }
 }
 

@@ -5,10 +5,15 @@ use App\DTOs\AuthDTO;
 use App\DTOs\SignupDTO;
 use App\Exceptions\ServiceException;
 use App\Repositories\UserRepository;
+use App\Repositories\WorkshopRepository;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService {
-    public function __construct(private UserRepository $repository) {}
+    public function __construct(
+        private UserRepository $repository,
+        private WorkshopRepository $workshopRepository
+    ) {}
 
     public function login(AuthDTO $dto){
         $user = $this->repository->getByPhone($dto->phone_number);
@@ -30,7 +35,34 @@ class AuthService {
     }
 
     public function signup(SignupDTO $dto){
-        
+        return DB::transaction(function () use ($dto) {
+            $user = $this->repository->create([
+                'name' => strtoupper($dto->name),
+                'phone_number' => $dto->phone_number,
+                'password' => Hash::make($dto->password),
+            ]);
+
+            if (! $user || ! $user->id) {
+                throw new ServiceException([], 500, 'Erro ao criar usuário');
+            }
+
+            $workshop = $this->workshopRepository->create([
+                'name' => strtoupper($dto->workshop_name),
+                'id_user' => $user->id,
+                'type' => $dto->workshop_type,
+            ]);
+
+            if (! $workshop || ! $workshop->id) {
+                throw new ServiceException([], 500, 'Erro ao criar workshop');
+            }
+
+            $authDTO = new AuthDTO(
+                $dto->phone_number,
+                $dto->password
+            );
+
+            return $this->login($authDTO);
+        });
     }
 }
 
