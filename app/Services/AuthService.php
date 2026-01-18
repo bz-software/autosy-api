@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\DTOs\AuthDTO;
+use App\DTOs\SignupDTO;
 use App\Exceptions\ServiceException;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +27,10 @@ class AuthService {
             'token' => $token,
             'user' => $user
         ];
+    }
+
+    public function signup(SignupDTO $dto){
+        
     }
 }
 
