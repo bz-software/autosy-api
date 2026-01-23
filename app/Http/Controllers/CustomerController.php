@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\CustomerDTO;
+use App\Http\Requests\SearchCustomerRequest;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Resources\Customer\CustomerResource;
 use App\Services\CustomerService as Service;
@@ -16,5 +17,9 @@ class CustomerController extends Controller
             CustomerDTO::fromRequest($request),
             $request->user()->workshop->id
         ));
+    }
+
+    public function search(SearchCustomerRequest $request){
+        return CustomerResource::collection($this->service->search(CustomerDTO::fromRequest($request)));
     }
 }

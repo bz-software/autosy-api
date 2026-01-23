@@ -17,5 +17,9 @@ class CustomerService {
         
         return $this->repository->create($customerDto->toArray());  
     }
+
+    public function search(CustomerDTO $params){
+        return $this->repository->searchByParams($params);
+    }
 }
 

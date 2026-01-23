@@ -9,8 +9,7 @@ class Vehicle extends Model
     protected $fillable = [
         'id_customer',
         'license_plate',
-        'model',
-        'year',
+        'model'
     ];
 
     public function customer()
