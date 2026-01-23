@@ -43,4 +43,9 @@ class Workshop extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function customers()
+    {
+        return $this->hasMany(Customer::class, 'id_workshop');
+    }
 }

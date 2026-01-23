@@ -19,7 +19,7 @@ return new class extends Migration {
 
             $table->timestamps();
 
-            $table->unique(['customer_id', 'license_plate']);
+            $table->unique(['id_customer', 'license_plate']);
         });
     }
 
