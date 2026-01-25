@@ -14,7 +14,7 @@ class VehicleService {
     ) {}
 
     public function getByCustomer($idCustomer, $idWorkshop){
-        $customer = $this->customerRepository->byId($idCustomer);
+        $customer = $this->customerRepository->byId($idCustomer, $idWorkshop);
 
         $notFoundMessage = "Cliente não encontrado";
         if(empty($customer)){

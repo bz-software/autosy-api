@@ -11,6 +11,11 @@ class Customer extends Model
         'phone_number',
         'id_workshop'
     ];
+
+    public function scopeFromWorkshop($query, int $idWorkshop)
+    {
+        return $query->where('id_workshop', $idWorkshop);
+    }
     
     /**
      * =============
