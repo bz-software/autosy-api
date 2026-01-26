@@ -12,7 +12,6 @@ class CustomerService {
     ) {}
 
     public function store(CustomerDTO $customerDto, $idWorkshop){
-        $customerDto->name = Str::upper($customerDto->name);
         $customerDto->id_workshop = $idWorkshop;
         
         return $this->repository->create($customerDto->toArray());  

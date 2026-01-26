@@ -35,11 +35,13 @@ class VehicleService {
         if(empty($customer)){
             throw new ServiceException([], 404, "Cliente não encontrado");
         }
-
-        $vehicleDTO->model = Str::upper($vehicleDTO->model);
-        $vehicleDTO->license_plate = Str::upper($vehicleDTO->license_plate);
         
         return $this->repository->store($vehicleDTO->toArray());  
+    }
+
+    public function update($id, VehicleDTO $vehicleDTO){
+        $vehicleDTO->id = $id;
+        return $this->repository->update($id, $vehicleDTO->toArray());
     }
 }
 

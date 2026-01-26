@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTOs\VehicleDTO;
 use App\Http\Requests\StoreVehicleRequest;
+use App\Http\Requests\UpdateVehicleRequest;
 use App\Http\Resources\Vehicle\VehicleResource;
 use App\Services\VehicleService as Service;
 use Illuminate\Http\Request;
@@ -26,5 +27,12 @@ class VehicleController extends Controller
             VehicleDTO::fromRequest($request), 
             $request->user()->workshop->id)
         );
+    }
+
+    public function update(UpdateVehicleRequest $request){
+        return new VehicleResource($this->service->update(
+            $request->route('id'),
+            VehicleDTO::fromRequest($request)
+        ));
     }
 }

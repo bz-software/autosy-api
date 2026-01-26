@@ -22,5 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('vehicles')->group(function () {
         Route::post('/', [VehicleController::class, 'store']);
+        Route::put('/{id}', [VehicleController::class, 'update']);
     });
 });

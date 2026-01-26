@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Validation\Rule;
 
-class StoreVehicleRequest extends AbstractFormRequest
+class UpdateVehicleRequest extends AbstractFormRequest
 {
     public function authorize(): bool
     {
@@ -20,6 +20,7 @@ class StoreVehicleRequest extends AbstractFormRequest
                 'string',
                 'max:10',
                 Rule::unique('vehicles', 'license_plate')
+                    ->ignore($this->route('id')),
             ],
             'idCustomer' => [
                 'required',
@@ -37,7 +38,7 @@ class StoreVehicleRequest extends AbstractFormRequest
             'model.required' => 'O modelo é obrigatório.',
             'model.min' => 'O modelo deve ter pelo menos 5 caracteres.',
             'licensePlate.required' => 'A placa é obrigatório.',
-            'licensePlate.unique' => 'Placa já está cadastrada.',
+            'licensePlate.unique' => 'Placa já está cadastrada .',
             'idCustomer.exists' => "Cliente não encontrado."
         ];
     }

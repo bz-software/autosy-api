@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
@@ -15,6 +16,13 @@ class Customer extends Model
     public function scopeFromWorkshop($query, int $idWorkshop)
     {
         return $query->where('id_workshop', $idWorkshop);
+    }
+
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => mb_strtoupper($value, 'UTF-8')
+        );
     }
     
     /**
