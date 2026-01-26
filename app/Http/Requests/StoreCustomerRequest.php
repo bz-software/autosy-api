@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+
 class StoreCustomerRequest extends AbstractFormRequest
 {
     public function authorize(): bool
@@ -18,7 +20,10 @@ class StoreCustomerRequest extends AbstractFormRequest
                 'string',
                 'max:20',
                 'regex:/^[1-9]{2}9[0-9]{8}$/',
-                'unique:customers,phone_number'
+                Rule::unique('customers', 'phone_number')
+                    ->where(fn ($query) =>
+                        $query->where('id_workshop', $this->user()->workshop->id)
+                    ),
             ],
         ];
     }

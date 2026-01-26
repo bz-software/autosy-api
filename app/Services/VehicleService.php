@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\DTOs\CustomerDTO;
+use App\DTOs\VehicleDTO;
 use App\Exceptions\ServiceException;
 use App\Repositories\CustomerRepository;
 use App\Repositories\VehicleRepository as Repository;
@@ -26,6 +27,19 @@ class VehicleService {
         }
 
         return $this->repository->byCustomer($idCustomer);
+    }
+
+    public function store(VehicleDTO $vehicleDTO, $idWorkshop){
+        $customer = $this->customerRepository->byId($vehicleDTO->id_customer, $idWorkshop);
+
+        if(empty($customer)){
+            throw new ServiceException([], 404, "Cliente não encontrado");
+        }
+
+        $vehicleDTO->model = Str::upper($vehicleDTO->model);
+        $vehicleDTO->license_plate = Str::upper($vehicleDTO->license_plate);
+        
+        return $this->repository->store($vehicleDTO->toArray());  
     }
 }
 

@@ -19,4 +19,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{customer}/vehicles', [VehicleController::class, 'byCustomer']);
         Route::put('/{id}', [CustomerController::class, 'update']);
     });
+
+    Route::prefix('vehicles')->group(function () {
+        Route::post('/', [VehicleController::class, 'store']);
+    });
 });
