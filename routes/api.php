@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -23,5 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('vehicles')->group(function () {
         Route::post('/', [VehicleController::class, 'store']);
         Route::put('/{id}', [VehicleController::class, 'update']);
+    });
+
+    Route::prefix('appointments')->group(function () {
+        Route::post('/', [AppointmentController::class, 'store']);
+        Route::get('/', [AppointmentController::class, 'index']);
     });
 });
