@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'phone_number',
         'password',
+        'id_workshop'
     ];
 
     /**
@@ -58,8 +59,9 @@ class User extends Authenticatable
      * Relations
      * =============
      */
+
     public function workshop()
     {
-        return $this->hasOne(Workshop::class, 'id_user');
+        return $this->belongsTo(Workshop::class, 'id_workshop');
     }
 }

@@ -13,10 +13,6 @@ return new class extends Migration
 
             $table->string('name');
 
-            $table->foreignId('id_user')
-                ->constrained('users')
-                ->cascadeOnDelete();
-
             $table->unsignedTinyInteger('type')
                 ->comment('1 = Oficina Mecânica | 2 = Lava-jato | 3 = Estética Automotiva');
 

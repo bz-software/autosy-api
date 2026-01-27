@@ -35,6 +35,7 @@ class StoreCustomerRequest extends AbstractFormRequest
             'name.min' => 'O nome deve ter pelo menos 2 caracteres.',
             'phoneNumber.required' => 'O telefone é obrigatório.',
             'phoneNumber.unique' => 'Este telefone já está cadastrado.',
+            'phoneNumber.regex' => "O telefone deve estar no formato DDD + 9 + número."
         ];
     }
 }

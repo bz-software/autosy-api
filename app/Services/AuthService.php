@@ -36,24 +36,24 @@ class AuthService {
 
     public function signup(SignupDTO $dto){
         return DB::transaction(function () use ($dto) {
-            $user = $this->repository->create([
-                'name' => strtoupper($dto->name),
-                'phone_number' => $dto->phone_number,
-                'password' => Hash::make($dto->password),
-            ]);
-
-            if (! $user || ! $user->id) {
-                throw new ServiceException([], 500, 'Erro ao criar usuário');
-            }
-
             $workshop = $this->workshopRepository->create([
                 'name' => strtoupper($dto->workshop_name),
-                'id_user' => $user->id,
                 'type' => $dto->workshop_type,
             ]);
 
             if (! $workshop || ! $workshop->id) {
                 throw new ServiceException([], 500, 'Erro ao criar workshop');
+            }
+
+            $user = $this->repository->create([
+                'name' => strtoupper($dto->name),
+                'phone_number' => $dto->phone_number,
+                'password' => Hash::make($dto->password),
+                'id_workshop' => $workshop->id
+            ]);
+
+            if (! $user || ! $user->id) {
+                throw new ServiceException([], 500, 'Erro ao criar usuário');
             }
 
             $authDTO = new AuthDTO(
