@@ -29,5 +29,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('appointments')->group(function () {
         Route::post('/', [AppointmentController::class, 'store']);
         Route::get('/', [AppointmentController::class, 'index']);
+        Route::patch('/{id}/start-diagnosis', [AppointmentController::class, 'startDiagnosis']);
     });
 });

@@ -10,5 +10,9 @@ class WorkshopRepository
     public function create($workshop){
         return $this->model->create($workshop);
     }
+
+    public function one($id){
+        return $this->model->find($id);
+    }
 }
 

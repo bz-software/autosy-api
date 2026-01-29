@@ -21,6 +21,11 @@ class Appointment extends Model
         'deleted' => 'boolean',
     ];
 
+    public function scopeFromWorkshop($query, int $idWorkshop)
+    {
+        return $query->where('id_workshop', $idWorkshop);
+    }
+
     public function workshop(): BelongsTo
     {
         return $this->belongsTo(Workshop::class, 'id_workshop');

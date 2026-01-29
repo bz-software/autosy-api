@@ -28,4 +28,18 @@ class AppointmentController extends Controller
             )
         );
     }
+
+    public function startDiagnosis(Request $request){
+        // return new AppointmentWithDetailsResource( 
+        //     $this->service->startDiagnosis(
+        //         $request->route('id'),
+        //         $request->user()->workshop->id
+        //     )
+        // );
+
+        return $this->service->startDiagnosis(
+            $request->route('id'),
+            $request->user()->workshop->id
+        );
+    }
 }

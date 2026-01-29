@@ -11,7 +11,25 @@ class AppointmentRepository
         return $this->model->create($appointment);
     }
 
-    public function findWithDetails(int $id) {
+    public function one($id, $idWorkshop){
+        return $this->model
+            ->fromWorkshop($idWorkshop)
+            ->where('id', $id)
+            ->where('deleted', false)
+            ->first();
+    }
+
+    public function update($id, $appointment){
+        $data = $this->model
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $data->update($appointment);
+
+        return $data;
+    }
+
+    public function withDetails(int $id) {
         return $this->model::with([
             'customer',
             'vehicle',
