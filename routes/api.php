@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\AppointmentServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -30,5 +31,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [AppointmentController::class, 'store']);
         Route::get('/', [AppointmentController::class, 'index']);
         Route::patch('/{id}/start-diagnosis', [AppointmentController::class, 'startDiagnosis']);
+        Route::post('/{appointment}/services', [AppointmentServiceController::class, 'store']);
     });
 });

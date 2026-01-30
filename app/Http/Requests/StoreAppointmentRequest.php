@@ -33,6 +33,7 @@ class StoreAppointmentRequest extends AbstractFormRequest
     public function messages(): array
     {
         return [
+            'notes.required' => "Observação é obrigatória"
         ];
     }
 }

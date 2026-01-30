@@ -26,6 +26,11 @@ class Appointment extends Model
         return $query->where('id_workshop', $idWorkshop);
     }
 
+    public function services()
+    {
+        return $this->hasMany(AppointmentService::class, 'id_appointment');
+    }
+
     public function workshop(): BelongsTo
     {
         return $this->belongsTo(Workshop::class, 'id_workshop');
