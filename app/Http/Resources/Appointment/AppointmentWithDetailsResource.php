@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Appointment;
 
+use App\Http\Resources\AppointmentService\AppointmentServiceResource;
 use App\Http\Resources\Customer\CustomerResource;
 use App\Http\Resources\Vehicle\VehicleResource;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class AppointmentWithDetailsResource extends JsonResource
             'notes' => $this->notes ?? null,
             'customer' => new CustomerResource($this->customer),
             'vehicle' => new VehicleResource($this->vehicle),
-            'services' => array()
+            'services' => AppointmentServiceResource::collection($this->services)
         ];
     }
 }
