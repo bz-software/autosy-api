@@ -59,5 +59,89 @@ class AppointmentService {
 
         return $this->repository->withDetails($id);
     }
+
+    public function requestApproval($id, $idWorkshop){
+        $appointment = $this->repository->one($id, $idWorkshop);
+
+        if(empty($appointment)){
+            throw new ServiceException([], 400, "Agendamento não encontrado");
+        }
+
+        $workshop = $this->rWorkshopp->one($idWorkshop);
+
+        if($workshop->type != WorkshopType::MECHANIC->value){
+            throw new ServiceException([], 400, "Status do agendamento não pode ser alterado");
+        }
+
+        $status = $appointment->status;
+
+        if($status != AppointmentStatus::DIAGNOSTICO->value){
+            throw new ServiceException([], 400, "Status do agendamento não pode ser alterado");
+        }
+
+        $appointment->status = AppointmentStatus::AGUARDANDO_APROVACAO->value;
+
+        if(!$this->repository->update($id, $appointment->toArray())){
+            throw new ServiceException([], 400, "Falha ao atualizar status do agendamento");
+        }
+
+        return $this->repository->withDetails($id);
+    }
+
+    public function approveDiagnosis($id, $idWorkshop){
+        $appointment = $this->repository->one($id, $idWorkshop);
+
+        if(empty($appointment)){
+            throw new ServiceException([], 400, "Agendamento não encontrado");
+        }
+
+        $workshop = $this->rWorkshopp->one($idWorkshop);
+
+        if($workshop->type != WorkshopType::MECHANIC->value){
+            throw new ServiceException([], 400, "Status do agendamento não pode ser alterado");
+        }
+
+        $status = $appointment->status;
+
+        if($status != AppointmentStatus::AGUARDANDO_APROVACAO->value){
+            throw new ServiceException([], 400, "Status do agendamento não pode ser alterado");
+        }
+
+        $appointment->status = AppointmentStatus::ANDAMENTO->value;
+
+        if(!$this->repository->update($id, $appointment->toArray())){
+            throw new ServiceException([], 400, "Falha ao atualizar status do agendamento");
+        }
+
+        return $this->repository->withDetails($id);
+    }
+
+    public function finalize($id, $idWorkshop){
+        $appointment = $this->repository->one($id, $idWorkshop);
+
+        if(empty($appointment)){
+            throw new ServiceException([], 400, "Agendamento não encontrado");
+        }
+
+        $workshop = $this->rWorkshopp->one($idWorkshop);
+
+        if($workshop->type != WorkshopType::MECHANIC->value){
+            throw new ServiceException([], 400, "Status do agendamento não pode ser alterado");
+        }
+
+        $status = $appointment->status;
+
+        if($status != AppointmentStatus::ANDAMENTO->value){
+            throw new ServiceException([], 400, "Status do agendamento não pode ser alterado");
+        }
+
+        $appointment->status = AppointmentStatus::FINALIZADO->value;
+
+        if(!$this->repository->update($id, $appointment->toArray())){
+            throw new ServiceException([], 400, "Falha ao atualizar status do agendamento");
+        }
+
+        return $this->repository->withDetails($id);
+    }
 }
 

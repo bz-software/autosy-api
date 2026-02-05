@@ -19,12 +19,16 @@ class AppointmentServiceService {
 
     public function store($idAppointment, $idWorkshop, AppointmentServiceDTO $appointmentServiceDTO){
         $appointment = $this->rAppointment->one($idAppointment, $idWorkshop);
+        $statusAllowed = [
+            AppointmentStatus::DIAGNOSTICO->value,
+            AppointmentStatus::AGUARDANDO_APROVACAO->value
+        ];
 
         if(empty($appointment)){
             throw new ServiceException([], 404, "Agendamento não encontrado");
         }
 
-        if($appointment->status != AppointmentStatus::DIAGNOSTICO->value){
+        if(!in_array($appointment->status, $statusAllowed)){
             throw new ServiceException([], 400, "Não é possível adicionar novos serviços.");
         }
 

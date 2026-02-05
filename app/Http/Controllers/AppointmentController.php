@@ -30,16 +30,38 @@ class AppointmentController extends Controller
     }
 
     public function startDiagnosis(Request $request){
-        // return new AppointmentWithDetailsResource( 
-        //     $this->service->startDiagnosis(
-        //         $request->route('id'),
-        //         $request->user()->workshop->id
-        //     )
-        // );
+        return new AppointmentWithDetailsResource( 
+            $this->service->startDiagnosis(
+                $request->route('id'),
+                $request->user()->workshop->id
+            )
+        );
+    }
 
-        return $this->service->startDiagnosis(
-            $request->route('id'),
-            $request->user()->workshop->id
+    public function requestApproval(Request $request){
+        return new AppointmentWithDetailsResource( 
+            $this->service->requestApproval(
+                $request->route('id'),
+                $request->user()->workshop->id
+            )
+        );
+    }
+
+    public function approveDiagnosis(Request $request){
+        return new AppointmentWithDetailsResource( 
+            $this->service->approveDiagnosis(
+                $request->route('id'),
+                $request->user()->workshop->id
+            )
+        );
+    }
+
+    public function finalize(Request $request){
+        return new AppointmentWithDetailsResource( 
+            $this->service->finalize(
+                $request->route('id'),
+                $request->user()->workshop->id
+            )
         );
     }
 }

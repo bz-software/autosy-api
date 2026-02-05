@@ -30,7 +30,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('appointments')->group(function () {
         Route::post('/', [AppointmentController::class, 'store']);
         Route::get('/', [AppointmentController::class, 'index']);
+
         Route::patch('/{id}/start-diagnosis', [AppointmentController::class, 'startDiagnosis']);
+        Route::patch('/{id}/request-approval', [AppointmentController::class, 'requestApproval']);   
+        Route::patch('/{id}/approve', [AppointmentController::class, 'approveDiagnosis']);
+        Route::patch('/{id}/finalize', [AppointmentController::class, 'finalize']);
+
         Route::post('/{appointment}/services', [AppointmentServiceController::class, 'store']);
         Route::delete('/{appointment}/services/{service}', [AppointmentServiceController::class, 'destroy']);
     });
