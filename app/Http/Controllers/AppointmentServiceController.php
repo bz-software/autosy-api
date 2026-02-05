@@ -6,6 +6,7 @@ use App\DTOs\AppointmentServiceDTO;
 use App\Http\Requests\StoreAppointmentServiceRequest;
 use App\Http\Resources\AppointmentService\AppointmentServiceResource;
 use App\Services\AppointmentServiceService;
+use Illuminate\Http\Request;
 
 class AppointmentServiceController extends Controller
 {
@@ -18,6 +19,14 @@ class AppointmentServiceController extends Controller
                 $request->user()->workshop->id,
                 AppointmentServiceDTO::fromRequest($request)
             )
+        );
+    }
+
+    public function destroy(Request $request){
+        return $this->service->destroy(
+            $request->route('service'),
+            $request->route('appointment'),
+            $request->user()->workshop->id
         );
     }
 }

@@ -11,11 +11,9 @@ class AppointmentServiceRepository
         return $this->model->create($appointment);
     }
 
-    public function one($id, $idWorkshop){
+    public function one($id){
         return $this->model
-            ->fromWorkshop($idWorkshop)
             ->where('id', $id)
-            ->where('deleted', false)
             ->first();
     }
 

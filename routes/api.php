@@ -32,5 +32,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [AppointmentController::class, 'index']);
         Route::patch('/{id}/start-diagnosis', [AppointmentController::class, 'startDiagnosis']);
         Route::post('/{appointment}/services', [AppointmentServiceController::class, 'store']);
+        Route::delete('/{appointment}/services/{service}', [AppointmentServiceController::class, 'destroy']);
     });
 });

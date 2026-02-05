@@ -37,5 +37,37 @@ class AppointmentServiceService {
 
         return $appointmentService;
     }
+
+    public function destroy($idAppointmentService, $idAppointment, $idWorkshop){
+        $appointment = $this->rAppointment->one($idAppointment, $idWorkshop);
+        $statusAllowed = [
+            AppointmentStatus::DIAGNOSTICO->value,
+            AppointmentStatus::AGUARDANDO_APROVACAO->value
+        ];
+
+        if(empty($appointment)){
+            throw new ServiceException([], 404, "Agendamento não encontrado");
+        }
+
+        if(!in_array($appointment->status, $statusAllowed)){
+            throw new ServiceException([], 400, "Exclusão não permitida");
+        }
+
+        $appointmentService = $this->repository->one($idAppointmentService);
+
+        if(empty($appointmentService)){
+            throw new ServiceException([], 404, "Serviço não encontrado");
+        }
+
+        if($appointmentService->id_appointment != $idAppointment){
+            throw new ServiceException([], 400, "Exclusão não permitida");
+        }
+
+        if($appointmentService->delete()){
+            return response()->noContent(200);
+        }
+
+        throw new ServiceException([], 500, "Falha ao excluir serviço");
+    }
 }
 
