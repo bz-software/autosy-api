@@ -22,13 +22,11 @@ return new class extends Migration {
                 ->constrained('vehicles')
                 ->cascadeOnDelete();
 
-            // snapshot da placa no momento do agendamento
             $table->string('license_plate');
 
             $table->string('status');
             $table->text('notes')->nullable();
 
-            // soft delete manual (como você pediu)
             $table->boolean('deleted')->default(false);
 
             $table->timestamps();

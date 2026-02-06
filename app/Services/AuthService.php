@@ -4,6 +4,7 @@ namespace App\Services;
 use App\DTOs\AuthDTO;
 use App\DTOs\SignupDTO;
 use App\Exceptions\ServiceException;
+use App\Repositories\ServiceRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WorkshopRepository;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,8 @@ use Illuminate\Support\Facades\Hash;
 class AuthService {
     public function __construct(
         private UserRepository $repository,
-        private WorkshopRepository $workshopRepository
+        private WorkshopRepository $workshopRepository,
+        private ServiceRepository $rService
     ) {}
 
     public function login(AuthDTO $dto){
@@ -55,6 +57,8 @@ class AuthService {
             if (! $user || ! $user->id) {
                 throw new ServiceException([], 500, 'Erro ao criar usuário');
             }
+
+            $this->rService->createDefaultServices($workshop->id, $dto->workshop_type);
 
             $authDTO = new AuthDTO(
                 $dto->phone_number,

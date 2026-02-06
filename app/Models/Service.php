@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Workshop extends Model
+class Service extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,8 +13,9 @@ class Workshop extends Model
      */
     protected $fillable = [
         'name',
-        'id_user',
-        'type'
+        'id_workshop',
+        'duration',
+        'deleted'
     ];
 
     /**
@@ -39,18 +40,8 @@ class Workshop extends Model
      * Relations
      * =============
      */
-    public function user()
+    public function workshop()
     {
-        return $this->hasOne(User::class, 'id_workshop');
-    }
-    
-    public function customers()
-    {
-        return $this->hasMany(Customer::class, 'id_workshop');
-    }
-
-    public function services()
-    {
-        return $this->hasMany(Service::class, 'id_workshop');
+        return $this->belongsTo(Workshop::class, 'id_workshop');
     }
 }

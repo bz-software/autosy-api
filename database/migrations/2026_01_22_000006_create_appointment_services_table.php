@@ -15,6 +15,11 @@ return new class extends Migration
                 ->constrained('appointments')
                 ->cascadeOnDelete();
 
+            $table->foreignId('id_service')
+                ->nullable()
+                ->constrained('services')
+                ->cascadeOnDelete();
+
             $table->string('service_name');
             $table->decimal('unit_price', 10, 2);
             $table->unsignedInteger('quantity');
