@@ -56,6 +56,14 @@ class AppointmentController extends Controller
         );
     }
 
+    public function approval(Request $request){
+        return new AppointmentWithDetailsResource( 
+            $this->service->approval(
+                $request->route('id')
+            )
+        );
+    }
+
     public function finalize(Request $request){
         return new AppointmentWithDetailsResource( 
             $this->service->finalize(

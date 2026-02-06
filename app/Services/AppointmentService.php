@@ -116,6 +116,22 @@ class AppointmentService {
         return $this->repository->withDetails($id);
     }
 
+    public function approval($id){
+        $appointment = $this->repository->onePublic($id);
+
+        if(empty($appointment)){
+            throw new ServiceException([], 400, "Agendamento não encontrado");
+        }
+
+        $status = $appointment->status;
+
+        if($status != AppointmentStatus::AGUARDANDO_APROVACAO->value){
+            throw new ServiceException([], 400, "Orçamento indisponível");
+        }
+
+        return $this->repository->withDetails($id);
+    }
+
     public function finalize($id, $idWorkshop){
         $appointment = $this->repository->one($id, $idWorkshop);
 

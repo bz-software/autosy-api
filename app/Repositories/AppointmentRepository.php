@@ -19,6 +19,13 @@ class AppointmentRepository
             ->first();
     }
 
+    public function onePublic($id){
+        return $this->model
+            ->where('id', $id)
+            ->where('deleted', false)
+            ->first();
+    }
+
     public function update($id, $appointment){
         $data = $this->model
             ->where('id', $id)

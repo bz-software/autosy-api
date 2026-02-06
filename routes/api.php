@@ -45,3 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [ServiceController::class, 'index']);
     });
 });
+
+Route::prefix('appointments')->group(function () {
+    Route::get('/{id}/approval', [AppointmentController::class, 'approval']);
+});
