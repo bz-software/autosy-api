@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\VehicleController;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -38,5 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/{appointment}/services', [AppointmentServiceController::class, 'store']);
         Route::delete('/{appointment}/services/{service}', [AppointmentServiceController::class, 'destroy']);
+    });
+
+    Route::prefix('services')->group(function() {
+        Route::get('/', [ServiceController::class, 'index']);
     });
 });

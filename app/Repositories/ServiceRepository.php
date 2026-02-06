@@ -21,6 +21,13 @@ class ServiceRepository
             ->first();
     }
 
+    public function all($idWorkshop){
+        return $this->model
+            ->fromWorkshop($idWorkshop)
+            ->where('deleted', false)
+            ->get();
+    }
+
     public function update($id, $appointment){
         $data = $this->model
             ->where('id', $id)

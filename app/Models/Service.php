@@ -35,6 +35,11 @@ class Service extends Model
         return [];
     }
 
+    public function scopeFromWorkshop($query, int $idWorkshop)
+    {
+        return $query->where('id_workshop', $idWorkshop);
+    }
+
     /**
      * =============
      * Relations
