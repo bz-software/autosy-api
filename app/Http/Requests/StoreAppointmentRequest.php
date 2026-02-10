@@ -25,7 +25,13 @@ class StoreAppointmentRequest extends AbstractFormRequest
                 'required'
             ],  
             'notes' => [
-                'required'
+                Rule::requiredIf(function() {
+                    if($this->user()->workshop->type == WorkshopType::MECHANIC->value){
+                        return true;
+                    }
+
+                    return false;
+                })
             ],
         ];
     }

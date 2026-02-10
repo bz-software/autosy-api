@@ -20,6 +20,14 @@ class AppointmentService {
     }
 
     public function store($idWorkshop, AppointmentDTO $appointmentDTO){
+        $workshop = $this->rWorkshopp->one($idWorkshop);
+
+        if($workshop->type == WorkshopType::MECHANIC->value){
+            return $this->storeMechanic($idWorkshop, $appointmentDTO);
+        }
+    }
+
+    public function storeMechanic($idWorkshop, AppointmentDTO $appointmentDTO){
         $appointmentDTO->id_workshop = $idWorkshop;
         $appointmentDTO->status = (int) AppointmentStatus::AGENDADO->value;
 
