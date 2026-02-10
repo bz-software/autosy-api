@@ -25,13 +25,7 @@ class StoreAppointmentRequest extends AbstractFormRequest
                 'required'
             ],  
             'notes' => [
-                Rule::requiredIf(function() {
-                    if($this->user()->workshop->type == WorkshopType::MECHANIC->value){
-                        return true;
-                    }
-
-                    return false;
-                })
+                'required'
             ],
         ];
     }
@@ -39,7 +33,9 @@ class StoreAppointmentRequest extends AbstractFormRequest
     public function messages(): array
     {
         return [
-            'notes.required' => "Observação é obrigatória"
+            'notes.required' => "Observação é obrigatória",
+            'idVehicle.required' => "Veículo é obrigatório",
+            'idCustomer.required' => "Cliente é obrigatório"
         ];
     }
 }

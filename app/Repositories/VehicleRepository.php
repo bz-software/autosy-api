@@ -14,6 +14,13 @@ class VehicleRepository
         return $this->model->where('id_customer', $idCustomer)->get();
     }
 
+    public function byIdAndCustomer($id, $idCustomer){
+        return $this->model
+            ->where('id_customer', $idCustomer)
+            ->where('id', $id)
+        ->first();
+    }
+
     public function update($id, $vehicle){
         $data = $this->model
             ->where('id', $id)

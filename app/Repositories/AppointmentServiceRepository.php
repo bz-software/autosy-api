@@ -7,8 +7,8 @@ class AppointmentServiceRepository
 {
     public function __construct(private AppointmentService $model) {}
 
-    public function store($appointment){
-        return $this->model->create($appointment);
+    public function store($appointmentService){
+        return $this->model->create($appointmentService);
     }
 
     public function one($id){
@@ -17,12 +17,12 @@ class AppointmentServiceRepository
             ->first();
     }
 
-    public function update($id, $appointment){
+    public function update($id, $appointmentService){
         $data = $this->model
             ->where('id', $id)
             ->firstOrFail();
 
-        $data->update($appointment);
+        $data->update($appointmentService);
 
         return $data;
     }

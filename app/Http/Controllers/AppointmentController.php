@@ -20,11 +20,11 @@ class AppointmentController extends Controller
         );
     }
 
-    public function store(StoreAppointmentRequest $request){
+    public function store(Request $request){
         return new AppointmentWithDetailsResource( 
             $this->service->store(
                 $request->user()->workshop->id,
-                AppointmentDTO::fromRequest($request)
+                $request
             )
         );
     }

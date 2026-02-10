@@ -4,7 +4,7 @@ namespace App\DTOs;
 
 use Illuminate\Http\Request;
 
-class AppointmentDTO extends AbstractDTO
+class AppointmentWithServicesDTO extends AbstractDTO
 {
     public function __construct(
         public int $id_workshop,
@@ -12,7 +12,8 @@ class AppointmentDTO extends AbstractDTO
         public int $id_vehicle,
         public string $license_plate,
         public int $status,
-        public string $notes
+        public string $notes,
+        public array $services
     ) {}
 
     
@@ -27,7 +28,11 @@ class AppointmentDTO extends AbstractDTO
             $request->input('idVehicle') ?? null,
             $request->input('licensePlate') ?? null,
             $request->input('status') ?? 0,
-            $request->input('notes') ?? null
+            $request->input('notes') ?? "",
+            array_map(
+                fn (array $service) => AppointmentServiceDTO::fromArray($service),
+                $request->input('services', [])
+            )
         );
     }
 }
