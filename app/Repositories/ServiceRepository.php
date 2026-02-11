@@ -9,8 +9,8 @@ class ServiceRepository
 {
     public function __construct(private Service $model) {}
 
-    public function store($appointment){
-        return $this->model->create($appointment);
+    public function store($service){
+        return $this->model->create($service);
     }
 
     public function one($id, $idWorkshop){
@@ -28,14 +28,26 @@ class ServiceRepository
             ->get();
     }
 
-    public function update($id, $appointment){
+    public function update($id, $service){
         $data = $this->model
             ->where('id', $id)
             ->firstOrFail();
 
-        $data->update($appointment);
+        $data->update($service);
 
         return $data;
+    }
+
+    public function delete($id){
+        $data = $this->model
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $data->deleted = true;
+
+        $updated = $data->save();
+
+        return $updated;
     }
 
     public function createDefaultServices($idWorkshop, $workshopType){
