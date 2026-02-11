@@ -49,4 +49,8 @@ class Service extends Model
     {
         return $this->belongsTo(Workshop::class, 'id_workshop');
     }
+
+    public function appointmentService(){
+        return $this->hasOne(AppointmentService::class, 'id_service');
+    }
 }

@@ -15,6 +15,7 @@ class AppointmentService extends Model
         'service_name',
         'unit_price',
         'quantity',
+        'id_service'
     ];
 
     protected $casts = [
@@ -32,5 +33,10 @@ class AppointmentService extends Model
     public function appointment(): BelongsTo
     {
         return $this->belongsTo(Appointment::class, 'id_appointment');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'id_service');
     }
 }

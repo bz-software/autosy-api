@@ -109,7 +109,7 @@ class AppointmentService {
 
             foreach($dto->services as $appointmentService){
                 $appointmentService->id_appointment = $appointment->id;
-
+                
                 if(!$this->rAppointmentService->store($appointmentService->toArray())){
                     throw new ServiceException([], 500, "Falha ao agendar (item)");
                 }
