@@ -51,4 +51,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::prefix('appointments')->group(function () {
     Route::get('/{id}/approval', [AppointmentController::class, 'approval']);
+    Route::get('/{id}/approval/pdf', [AppointmentController::class, 'pdfDiagnosis']);
 });

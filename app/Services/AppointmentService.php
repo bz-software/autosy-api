@@ -16,6 +16,7 @@ use App\Repositories\ServiceRepository;
 use App\Repositories\VehicleRepository;
 use App\Repositories\WorkshopRepository;
 use App\Validation\ValidationErrorFormatter;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -233,6 +234,26 @@ class AppointmentService {
         }
 
         return $this->repository->withDetails($id);
+    }
+
+    public function approvalPdf($id){
+        $appointment = $this->repository->onePublic($id);
+
+        if(empty($appointment)){
+            throw new ServiceException([], 400, "Agendamento não encontrado");
+        }
+
+        $status = $appointment->status;
+
+        if($status != AppointmentStatus::AGUARDANDO_APROVACAO->value){
+            throw new ServiceException([], 400, "Orçamento indisponível");
+        }
+
+        $data = $this->repository->withDetails($id);
+
+        $pdf = Pdf::loadView('reports.diagnosis-to-approve', $data->toArray());
+
+        return $pdf->download('teste-diagnostico.pdf');
     }
 
     public function finalize($id, $idWorkshop){

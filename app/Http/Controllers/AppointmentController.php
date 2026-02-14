@@ -64,6 +64,12 @@ class AppointmentController extends Controller
         );
     }
 
+    public function pdfDiagnosis(Request $request){
+        return $this->service->approvalPdf(
+            $request->route('id')
+        );
+    }
+
     public function finalize(Request $request){
         return new AppointmentWithDetailsResource( 
             $this->service->finalize(
