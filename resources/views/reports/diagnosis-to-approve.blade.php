@@ -16,5 +16,7 @@
 
     <h1>Relatorio para aprovar</h1>
 
+    <p><?= $id ?></p>
+    <p><?= $license_plate ?></p>
 </body>
 </html>
