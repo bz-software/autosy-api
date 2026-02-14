@@ -40,7 +40,8 @@ class AppointmentRepository
         return $this->model::with([
             'customer',
             'vehicle',
-            'services'
+            'services',
+            'workshop'
         ])
         ->where('deleted', false)
         ->find($id);
