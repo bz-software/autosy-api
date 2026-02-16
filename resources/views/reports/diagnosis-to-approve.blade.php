@@ -17,6 +17,17 @@
     <h1>Relatorio para aprovar</h1>
 
     <p><?= $id ?></p>
+    <p><?= $customer['name']; ?></p>
+    <p><?= $vehicle['model']; ?></p>
     <p><?= $license_plate ?></p>
+    <p><?= $notes ?></p>
+
+    <h1>Serviços do orçamento</h1>
+
+    <p><?= $services['service_name']; ?></p>
+    <p><?= $services['unit_price']; ?></p>
+    
+    
+    
 </body>
 </html>
