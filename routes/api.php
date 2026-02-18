@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [CustomerController::class, 'search']);
         Route::get('/{customer}/vehicles', [VehicleController::class, 'byCustomer']);
         Route::put('/{id}', [CustomerController::class, 'update']);
+        Route::get('/{id}/appointments', [AppointmentController::class, 'byCustomer']);
     });
 
     Route::prefix('vehicles')->group(function () {
