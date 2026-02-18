@@ -277,5 +277,14 @@ class AppointmentService {
 
         return $this->repository->withDetails($id);
     }
+
+    public function byCustomer($idCustomer, $idWorkshop){
+        $customer = $this->rCustomer->byId($idCustomer, $idWorkshop);
+        if(empty($customer)){
+            throw new ServiceException([], 404, "Cliente não encontrado");
+        }
+
+        return $this->repository->byCustomer($idCustomer);
+    }
 }
 
