@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTOs\CashTransaction\SearchCashTransactionDTO;
 use App\DTOs\CashTransactionDTO;
 use App\Enums\CashTransactionCategory;
 use App\Enums\CashTransactionType;
@@ -13,8 +14,8 @@ class CashTransactionService
 {
     public function __construct(private CashTransactionRepository $repository){}
 
-    public function list($idWorkshop){
-        return $this->repository->byIdWorkshop($idWorkshop);
+    public function list(SearchCashTransactionDTO $dto, $idWorkshop){
+        return $this->repository->byIdWorkshop($dto, $idWorkshop);
     }
 
     public function store(CashTransactionDTO $dto, $idUser, $idWorkshop){
