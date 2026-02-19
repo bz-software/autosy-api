@@ -2,13 +2,12 @@
 namespace App\Services;
 
 use App\DTOs\AppointmentDTO;
-use App\DTOs\AppointmentServiceDTO;
 use App\DTOs\AppointmentWithServicesDTO;
 use App\Enums\AppointmentStatus;
 use App\Enums\WorkshopType;
 use App\Exceptions\ServiceException;
-use App\Http\Requests\StoreAppointmentRequest;
-use App\Http\Requests\StoreAppointmentWithServicesRequest;
+use App\Http\Requests\Appointment\StoreAppointmentRequest;
+use App\Http\Requests\Appointment\StoreAppointmentWithServicesRequest;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\AppointmentServiceRepository;
 use App\Repositories\CustomerRepository;

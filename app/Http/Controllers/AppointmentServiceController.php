@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\AppointmentServiceDTO;
-use App\Http\Requests\StoreAppointmentServiceRequest;
+use App\Http\Requests\Appointment\StoreAppointmentServiceRequest;
 use App\Http\Resources\AppointmentService\AppointmentServiceResource;
 use App\Services\AppointmentServiceService;
 use Illuminate\Http\Request;

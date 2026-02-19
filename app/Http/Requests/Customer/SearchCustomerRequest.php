@@ -1,6 +1,7 @@
 <?php
-namespace App\Http\Requests;
+namespace App\Http\Requests\Customer;
 
+use App\Http\Requests\AbstractFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SearchCustomerRequest extends AbstractFormRequest

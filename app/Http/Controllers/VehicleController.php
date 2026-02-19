@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\VehicleDTO;
-use App\Http\Requests\StoreVehicleRequest;
-use App\Http\Requests\UpdateVehicleRequest;
+use App\Http\Requests\Vehicle\StoreVehicleRequest;
+use App\Http\Requests\Vehicle\UpdateVehicleRequest;
 use App\Http\Resources\Vehicle\VehicleResource;
 use App\Services\VehicleService as Service;
 use Illuminate\Http\Request;

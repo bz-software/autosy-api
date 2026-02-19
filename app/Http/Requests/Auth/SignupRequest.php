@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use App\Enums\WorkshopType;
+use App\Http\Requests\AbstractFormRequest;
 use Illuminate\Validation\Rule;
 
 class SignupRequest extends AbstractFormRequest

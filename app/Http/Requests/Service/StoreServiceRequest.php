@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Service;
+
+use App\Http\Requests\AbstractFormRequest;
 
 class StoreServiceRequest extends AbstractFormRequest
 {
