@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\DTOs\CashTransactionDTO;
+use App\Enums\CashTransactionCategory;
+use App\Enums\CashTransactionType;
 use App\Exceptions\ServiceException;
 use App\Repositories\CashTransactionRepository;
 use Carbon\Carbon;
@@ -18,6 +20,14 @@ class CashTransactionService
 
         if ($transactionDate->lt($startOfCurrentMonth)) {
             throw new ServiceException([], 400, "Não é permitido lançar movimentações para meses anteriores.");
+        }
+
+        $typeEnum = CashTransactionType::from($dto->type);
+        $categoryEnum = CashTransactionCategory::from($dto->category);
+
+        // validates whether the category belongs to the type.
+        if ($categoryEnum->type() !== $typeEnum) {
+            throw new ServiceException([], 400, 'A categoria selecionada não pertence ao tipo informado.');
         }
 
         $dto->created_by = $idUser;

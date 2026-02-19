@@ -38,4 +38,18 @@ enum CashTransactionCategory: int
             self::EXPENSE_OTHER => "Outros"
         };
     }
+
+    public function type(): CashTransactionType
+    {
+        return match ($this) {
+            self::SERVICE,
+            self::PRODUCT_SALE,
+            self::INCOME_ADJUSTMENT,
+            self::INCOME_OTHER
+                => CashTransactionType::INCOME,
+
+            default
+                => CashTransactionType::EXPENSE,
+        };
+    }
 }
