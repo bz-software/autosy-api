@@ -45,4 +45,9 @@ class Appointment extends Model
     {
         return $this->belongsTo(Vehicle::class, 'id_vehicle');
     }
+
+    public function cashTransactions()
+    {
+        return $this->hasMany(CashTransaction::class, 'id_appointment');
+    }
 }

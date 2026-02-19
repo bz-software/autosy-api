@@ -53,4 +53,9 @@ class Workshop extends Model
     {
         return $this->hasMany(Service::class, 'id_workshop');
     }
+
+    public function cashTransactions()
+    {
+        return $this->hasMany(CashTransaction::class, 'id_workshop');
+    }
 }

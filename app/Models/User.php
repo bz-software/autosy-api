@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Workshop::class, 'id_workshop');
     }
+
+    public function cashTransactionsCreated()
+    {
+        return $this->hasMany(CashTransaction::class, 'created_by');
+    }
 }
