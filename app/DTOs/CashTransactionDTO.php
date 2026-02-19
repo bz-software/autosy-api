@@ -8,17 +8,17 @@ class CashTransactionDTO extends AbstractDTO
 {
     public function __construct(
         public int $id,
-        public int $idWorkshop,
+        public ?int $id_workshop,
         public int $type,
         public int $category,
-        public ?int $sourceType,
-        public ?int $idAppointment,
-        public ?int $idInventoryMovement,
+        public ?int $source_type,
+        public ?int $id_appointment,
+        public ?int $id_inventory_movement,
         public float $amount,
-        public int $paymentMethod,
-        public string $transactionDate,
+        public int $payment_method,
+        public string $transaction_date,
         public ?string $notes,
-        public int $createdBy
+        public int $created_by
     ) {}
 
     /**
@@ -32,12 +32,12 @@ class CashTransactionDTO extends AbstractDTO
             $request->input('type'),
             $request->input('category'),
             $request->input('sourceType'),
-            $request->input('idAppointment'),
-            $request->input('idInventoryMovement'),
+            $request->input('idAppointment') ?? null,
+            $request->input('idInventoryMovement') ?? null,
             (float) $request->input('amount'),
             $request->input('paymentMethod'),
             $request->input('transactionDate'),
-            $request->input('notes'),
+            $request->input('notes') ?? null,
             $request->user()->id
         );
     }
