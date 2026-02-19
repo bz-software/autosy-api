@@ -13,6 +13,10 @@ class CashTransactionService
 {
     public function __construct(private CashTransactionRepository $repository){}
 
+    public function list($idWorkshop){
+        return $this->repository->byIdWorkshop($idWorkshop);
+    }
+
     public function store(CashTransactionDTO $dto, $idUser, $idWorkshop){
         $transactionDate = Carbon::parse($dto->transaction_date);
 

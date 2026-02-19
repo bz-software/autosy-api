@@ -14,6 +14,14 @@ class CashTransactionController extends Controller
 {
     public function __construct(private CashTransactionService $service) {}
 
+    public function index(Request $request){
+        return CashTransactionResource::collection(
+            $this->service->list(
+                $request->user()->workshop->id
+            )
+        );
+    }
+
     public function store(StoreCashTransactionRequest $request) {
         return new CashTransactionResource(
             $this->service->store(

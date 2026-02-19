@@ -27,8 +27,7 @@ class CashTransactionResource extends JsonResource
             "transactionDate" => $this->transaction_date?->format('Y-m-d'),
             "notes" => $this->notes ?? null,
             "createdBy" => $this->created_by ?? null,
-            "createdAt" => $this->created_at?->format('Y-m-d H:i:s'),
-            "updatedAt" => $this->updated_at?->format('Y-m-d H:i:s'),
+            "createdAt" => $this->created_at?->format('Y-m-d H:i:s')
         ];
     }
 }

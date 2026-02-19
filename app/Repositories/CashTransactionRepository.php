@@ -10,4 +10,10 @@ class CashTransactionRepository extends AbstractRepository
     {
         parent::__construct($model);
     }
+
+    public function byIdWorkshop($idWorkshop){
+        return $this->model
+            ->fromWorkshop($idWorkshop)
+        ->get();
+    }
 }
