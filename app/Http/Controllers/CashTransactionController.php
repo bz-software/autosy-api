@@ -44,4 +44,11 @@ class CashTransactionController extends Controller
             )
         );
     }
+
+    public function destroy(Request $request){
+        return $this->service->destroy(
+            $request->route('id'),
+            $request->user()->workshop->id
+        );
+    }
 }

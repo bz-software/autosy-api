@@ -42,14 +42,14 @@ abstract class AbstractRepository
         return $this->baseQuery()->get();
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
         $record = $this->findOrFail($id);
 
         if ($this->hasDeletedColumn()) {
-            $record->update(['deleted' => 1]);
+            return $record->update(['deleted' => 1]);
         } else {
-            $record->delete();
+            return $record->delete();
         }
     }
 

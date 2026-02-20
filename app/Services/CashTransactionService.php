@@ -69,4 +69,26 @@ class CashTransactionService
 
         return $this->repository->update($id, $dto->toArray());
     }
+
+    public function destroy($id, $idWorkshop){
+        $cashTransaction = $this->repository->findByIdAndWorkshop($id, $idWorkshop);
+
+        if(empty($cashTransaction)){
+            throw new ServiceException([], 404, "Movimentação não encontrada");
+        }
+
+        $transactionDate = Carbon::parse($cashTransaction->transaction_date);
+
+        $startOfCurrentMonth = Carbon::now()->startOfMonth();
+
+        if ($transactionDate->lt($startOfCurrentMonth)) {
+            throw new ServiceException([], 400, "Não é permitido excluir movimentações para meses anteriores.");
+        }
+
+        if($this->repository->delete($id)){
+            return response()->noContent(200);
+        }
+
+        throw new ServiceException([], 400, "Erro ao excluir movimentação");
+    }
 }
