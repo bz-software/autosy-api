@@ -25,7 +25,7 @@ class AppointmentWithDetailsResource extends JsonResource
             'idCustomer' => $this->id_customer ?? null,
             'idVehicle' => $this->id_vehicle ?? null,
             'licensePlate' => $this->license_plate ?? null,
-            'date' => '2026-01-27',
+            'date' => $this->appointment_date,
             'status' => intval($this->status) ?? null,
             'notes' => $this->notes ?? null,
             'customer' => new CustomerResource($this->customer),

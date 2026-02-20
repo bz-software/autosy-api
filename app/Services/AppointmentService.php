@@ -66,7 +66,7 @@ class AppointmentService {
 
         $dto->id_workshop = $idWorkshop;
         $dto->status = (int) AppointmentStatus::AGENDADO->value;
-        $dto->date = Carbon::now()->format('Y-m-d');
+        $dto->appointment_date = Carbon::now()->format('Y-m-d');
 
         $appointment = $this->repository->store($dto->toArray());
 
@@ -105,7 +105,7 @@ class AppointmentService {
         return DB::transaction(function () use ($dto, $idWorkshop) {
             $dto->id_workshop = $idWorkshop;
             $dto->status = (int) AppointmentStatus::ANDAMENTO->value;
-            $dto->date = Carbon::now()->format('Y-m-d');
+            $dto->appointment_date = Carbon::now()->format('Y-m-d');
 
             $appointment = $this->repository->store($dto->toArray());
 

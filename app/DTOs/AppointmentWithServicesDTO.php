@@ -13,7 +13,7 @@ class AppointmentWithServicesDTO extends AbstractDTO
         public string $license_plate,
         public int $status,
         public string $notes,
-        public string $date,
+        public string $appointment_date,
         public array $services
     ) {}
 

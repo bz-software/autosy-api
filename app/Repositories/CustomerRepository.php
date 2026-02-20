@@ -38,6 +38,12 @@ class CustomerRepository
         return $customers;
     }
 
+    public function countByWorkshop($idWorkshop){
+        return $this->model
+            ->fromWorkshop($idWorkshop)
+        ->count();
+    }
+
     public function update($id, $customer){
         $data = $this->model
             ->where('id', $id)

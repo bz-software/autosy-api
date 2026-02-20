@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CashTransactionController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\VehicleController;
 
@@ -57,6 +58,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [CashTransactionController::class, 'update']);
         Route::delete('/{id}', [CashTransactionController::class, 'destroy']);
     });
+
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
 
 Route::prefix('appointments')->group(function () {

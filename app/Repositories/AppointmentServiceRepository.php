@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Enums\AppointmentStatus;
 use App\Models\AppointmentService;
 
 class AppointmentServiceRepository
@@ -31,6 +32,16 @@ class AppointmentServiceRepository
         return $this->model
             ->where('id_appointment', $idAppointment)
         ->get();
+    }
+
+    public function periodRevenue($idWorkshop, $startDate, $endDate){
+        return $this->model::query()
+            ->join('appointments as a', 'a.id', '=', 'appointment_services.id_appointment')
+            ->whereBetween('a.appointment_date', [$startDate, $endDate])
+            ->where('a.status', AppointmentStatus::FINALIZADO->value)
+            ->where('a.id_workshop', $idWorkshop)
+            ->selectRaw('SUM(appointment_services.unit_price * appointment_services.quantity) as total')
+            ->value('total') ?? 0;
     }
 
     public function amount($idAppointment){

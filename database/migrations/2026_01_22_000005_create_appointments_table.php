@@ -27,7 +27,7 @@ return new class extends Migration {
             $table->string('status');
             $table->text('notes')->nullable();
 
-            $table->date('date');
+            $table->date('appointment_date');
 
             $table->boolean('deleted')->default(false);
 
