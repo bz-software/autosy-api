@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('cash-transactions')->group(function () {
         Route::post('/', [CashTransactionController::class, 'store']);
         Route::get('/', [CashTransactionController::class, 'index']);
+        Route::put('/{id}', [CashTransactionController::class, 'update']);
     });
 });
 

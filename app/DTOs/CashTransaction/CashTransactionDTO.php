@@ -1,7 +1,8 @@
 <?php
 
-namespace App\DTOs;
+namespace App\DTOs\CashTransaction;
 
+use App\DTOs\AbstractDTO;
 use Illuminate\Http\Request;
 
 class CashTransactionDTO extends AbstractDTO

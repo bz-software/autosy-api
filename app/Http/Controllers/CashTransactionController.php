@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\CashTransactionDTO;
+use App\DTOs\CashTransaction\CashTransactionDTO;
 use App\DTOs\CashTransaction\SearchCashTransactionDTO;
 use App\Http\Requests\CashTransaction\StoreCashTransactionRequest;
 use App\Http\Requests\CashTransaction\SearchCashTransactionRequest;
@@ -30,6 +30,16 @@ class CashTransactionController extends Controller
             $this->service->store(
                 CashTransactionDTO::fromRequest($request),
                 $request->user()->id,
+                $request->user()->workshop->id
+            )
+        );
+    }
+
+    public function update(StoreCashTransactionRequest $request) {
+        return new CashTransactionResource(
+            $this->service->update(
+                CashTransactionDTO::fromRequest($request),
+                $request->route('id'),
                 $request->user()->workshop->id
             )
         );

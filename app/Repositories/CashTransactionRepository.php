@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\DTOs\CashTransaction\SearchCashTransactionDTO;
 use App\Models\CashTransaction;
+use Illuminate\Database\Eloquent\Model;
 
 class CashTransactionRepository extends AbstractRepository
 {
@@ -22,6 +23,14 @@ class CashTransactionRepository extends AbstractRepository
                     $filters->end_date
                 )
             )
+            ->orderByDate()
             ->get();
+    }
+
+    public function findByIdAndWorkshop(int $id, int $idWorkshop)
+    {
+        return $this->model
+            ->fromWorkshop($idWorkshop)
+            ->find($id);
     }
 }
