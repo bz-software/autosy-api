@@ -15,10 +15,12 @@ class Appointment extends Model
         'status',
         'notes',
         'deleted',
+        'date'
     ];
 
     protected $casts = [
         'deleted' => 'boolean',
+        'date' => 'date'
     ];
 
     public function scopeFromWorkshop($query, int $idWorkshop)

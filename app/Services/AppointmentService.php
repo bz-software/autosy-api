@@ -17,6 +17,7 @@ use App\Repositories\VehicleRepository;
 use App\Repositories\WorkshopRepository;
 use App\Validation\ValidationErrorFormatter;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -65,6 +66,7 @@ class AppointmentService {
 
         $dto->id_workshop = $idWorkshop;
         $dto->status = (int) AppointmentStatus::AGENDADO->value;
+        $dto->date = Carbon::now()->format('Y-m-d');
 
         $appointment = $this->repository->store($dto->toArray());
 
@@ -103,6 +105,7 @@ class AppointmentService {
         return DB::transaction(function () use ($dto, $idWorkshop) {
             $dto->id_workshop = $idWorkshop;
             $dto->status = (int) AppointmentStatus::ANDAMENTO->value;
+            $dto->date = Carbon::now()->format('Y-m-d');
 
             $appointment = $this->repository->store($dto->toArray());
 
