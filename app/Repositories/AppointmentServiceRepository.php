@@ -26,5 +26,16 @@ class AppointmentServiceRepository
 
         return $data;
     }
+
+    public function byAppointment($idAppointment){
+        return $this->model
+            ->where('id_appointment', $idAppointment)
+        ->get();
+    }
+
+    public function amount($idAppointment){
+        return $this->model::where('id_appointment', $idAppointment)
+            ->sum('unit_price');
+    }
 }
 

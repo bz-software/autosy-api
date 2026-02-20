@@ -41,7 +41,8 @@ class AppointmentRepository
             'customer',
             'vehicle',
             'services',
-            'workshop'
+            'workshop',
+            'cashTransaction'
         ])
         ->where('deleted', false)
         ->find($id);

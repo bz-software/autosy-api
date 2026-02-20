@@ -69,11 +69,22 @@ class AppointmentController extends Controller
         );
     }
 
+    public function awaitPayment(Request $request){
+        return new AppointmentWithDetailsResource( 
+            $this->service->awaitPayment(
+                $request->route('id'),
+                $request->user()->workshop->id
+            )
+        );
+    }
+
     public function finalize(Request $request){
         return new AppointmentWithDetailsResource( 
             $this->service->finalize(
                 $request->route('id'),
-                $request->user()->workshop->id
+                $request->user()->workshop->id,
+                $request->user()->id,
+                $request->input('paymentMethod')
             )
         );
     }

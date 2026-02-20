@@ -5,14 +5,20 @@ namespace App\Services;
 use App\DTOs\CashTransaction\SearchCashTransactionDTO;
 use App\DTOs\CashTransaction\CashTransactionDTO;
 use App\Enums\CashTransactionCategory;
+use App\Enums\CashTransactionSourceType;
 use App\Enums\CashTransactionType;
 use App\Exceptions\ServiceException;
+use App\Models\Appointment;
+use App\Repositories\AppointmentServiceRepository;
 use App\Repositories\CashTransactionRepository;
 use Carbon\Carbon;
 
 class CashTransactionService
 {
-    public function __construct(private CashTransactionRepository $repository){}
+    public function __construct(
+        private CashTransactionRepository $repository,
+        private AppointmentServiceRepository $rAppointmentService
+    ){}
 
     public function list(SearchCashTransactionDTO $dto, $idWorkshop){
         return $this->repository->byIdWorkshop($dto, $idWorkshop);
@@ -26,6 +32,10 @@ class CashTransactionService
         if ($transactionDate->lt($startOfCurrentMonth)) {
             throw new ServiceException([], 400, "Não é permitido lançar movimentações para meses anteriores.");
         }
+        
+        if(!empty($dto->id_appointment)){
+            throw new ServiceException([], 400, "Não é permitido lançar movimentações para serviços de forma manual.");
+        }
 
         $typeEnum = CashTransactionType::from($dto->type);
         $categoryEnum = CashTransactionCategory::from($dto->category);
@@ -37,6 +47,7 @@ class CashTransactionService
 
         $dto->created_by = $idUser;
         $dto->id_workshop = $idWorkshop;
+        $dto->source_type = CashTransactionSourceType::MANUAL->value;
         return $this->repository->create($dto->toArray());
     }
 
@@ -45,6 +56,10 @@ class CashTransactionService
 
         if(empty($cashTransaction)){
             throw new ServiceException([], 404, "Movimentação não encontrada");
+        }
+
+        if($cashTransaction->id_appointment){
+            throw new ServiceException([], 400, "Movimentação não pode ser alterada");
         }
 
         $transactionDate = Carbon::parse($dto->transaction_date);
@@ -77,6 +92,10 @@ class CashTransactionService
             throw new ServiceException([], 404, "Movimentação não encontrada");
         }
 
+        if($cashTransaction->id_appointment){
+            throw new ServiceException([], 400, "Movimentação não pode ser excluída");
+        }
+
         $transactionDate = Carbon::parse($cashTransaction->transaction_date);
 
         $startOfCurrentMonth = Carbon::now()->startOfMonth();
@@ -90,5 +109,33 @@ class CashTransactionService
         }
 
         throw new ServiceException([], 400, "Erro ao excluir movimentação");
+    }
+
+    public function createCashTransactionByAppointment(Appointment $appointment, $paymentMethod, $idWorkshop, $idUser){
+        $appointmentServices = $this->rAppointmentService->byAppointment($appointment->id);
+
+        $amount = 0;
+        foreach($appointmentServices as $appointmentService){
+            $unit = $appointmentService->unit_price * $appointmentService->quantity;
+
+            $amount += $unit;
+        }
+
+        $cashTransactionDTO = new CashTransactionDTO(
+            null,
+            $idWorkshop,
+            CashTransactionType::INCOME->value,
+            CashTransactionCategory::SERVICE->value,
+            CashTransactionSourceType::SERVICE->value,
+            $appointment->id,
+            null,
+            $amount,
+            $paymentMethod,
+            Carbon::now()->format('Y-m-d'),
+            null,
+            $idUser
+        );
+
+        return $this->repository->create($cashTransactionDTO->toArray());
     }
 }

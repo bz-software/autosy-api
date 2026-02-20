@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/{id}/start-diagnosis', [AppointmentController::class, 'startDiagnosis']);
         Route::patch('/{id}/request-approval', [AppointmentController::class, 'requestApproval']);   
         Route::patch('/{id}/approve', [AppointmentController::class, 'approveDiagnosis']);
+        Route::patch('/{id}/await-payment', [AppointmentController::class, 'awaitPayment']);
         Route::patch('/{id}/finalize', [AppointmentController::class, 'finalize']);
 
         Route::post('/{appointment}/services', [AppointmentServiceController::class, 'store']);

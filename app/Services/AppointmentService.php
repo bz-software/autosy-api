@@ -4,6 +4,7 @@ namespace App\Services;
 use App\DTOs\AppointmentDTO;
 use App\DTOs\AppointmentWithServicesDTO;
 use App\Enums\AppointmentStatus;
+use App\Enums\PaymentMethod;
 use App\Enums\WorkshopType;
 use App\Exceptions\ServiceException;
 use App\Http\Requests\Appointment\StoreAppointmentRequest;
@@ -27,7 +28,9 @@ class AppointmentService {
         private WorkshopRepository $rWorkshop,
         private VehicleRepository $rVehicle,
         private CustomerRepository $rCustomer,
-        private ServiceRepository $rService
+        private ServiceRepository $rService,
+
+        private CashTransactionService $sCashTransaction
     ) {}
 
     public function list($idWorkshop){
@@ -255,7 +258,7 @@ class AppointmentService {
         return $pdf->download('teste-diagnostico.pdf');
     }
 
-    public function finalize($id, $idWorkshop){
+    public function awaitPayment($id, $idWorkshop){
         $appointment = $this->repository->one($id, $idWorkshop);
 
         if(empty($appointment)){
@@ -268,13 +271,49 @@ class AppointmentService {
             throw new ServiceException([], 400, "Status do agendamento não pode ser alterado");
         }
 
-        $appointment->status = AppointmentStatus::FINALIZADO->value;
+        $appointment->status = AppointmentStatus::AGUARDANDO_PAGAMENTO->value;
 
         if(!$this->repository->update($id, $appointment->toArray())){
             throw new ServiceException([], 400, "Falha ao atualizar status do agendamento");
         }
 
         return $this->repository->withDetails($id);
+    }
+
+    public function finalize($id, $idWorkshop, $idUser, $paymentMethod){
+        $appointment = $this->repository->one($id, $idWorkshop);
+
+        if(empty($paymentMethod)){
+            throw new ServiceException([], 400, "Método de pagamento é obrigatório");
+        }
+
+        if(!PaymentMethod::findById($paymentMethod)){
+            throw new ServiceException([], 400, "Método de pagamento inválido");
+        }
+
+        if(empty($appointment)){
+            throw new ServiceException([], 400, "Agendamento não encontrado");
+        }
+
+        $status = $appointment->status;
+
+        if($status != AppointmentStatus::AGUARDANDO_PAGAMENTO->value){
+            throw new ServiceException([], 400, "Status do agendamento não pode ser alterado");
+        }
+
+        $appointment->status = AppointmentStatus::FINALIZADO->value;
+
+        return DB::transaction(function () use ($id, $appointment, $paymentMethod, $idWorkshop, $idUser) {
+            if(!$this->repository->update($id, $appointment->toArray())){
+                throw new ServiceException([], 400, "Falha ao atualizar status do agendamento");
+            }
+
+            if(!$this->sCashTransaction->createCashTransactionByAppointment($appointment, $paymentMethod, $idWorkshop, $idUser)){
+                throw new ServiceException([], 400, "Falha ao atualizar status do agendamento");
+            }
+
+            return $this->repository->withDetails($id);
+        });
     }
 
     public function byCustomer($idCustomer, $idWorkshop){

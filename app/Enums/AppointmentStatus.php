@@ -13,6 +13,7 @@ enum AppointmentStatus: int
     case AGUARDANDO_APROVACAO = 3;
     case ANDAMENTO = 4;
     case FINALIZADO = 5;
+    case AGUARDANDO_PAGAMENTO = 6;
 
     public function label(): string
     {
@@ -21,7 +22,8 @@ enum AppointmentStatus: int
             self::DIAGNOSTICO => 'Em diagnóstico',
             self::AGUARDANDO_APROVACAO => 'Aguardando aprovação',
             self::ANDAMENTO => 'Em andamento',
-            self::FINALIZADO => 'Finalizado'
+            self::FINALIZADO => 'Finalizado',
+            self::AGUARDANDO_PAGAMENTO => 'Aguardando pagamento'
         };
     }
 }

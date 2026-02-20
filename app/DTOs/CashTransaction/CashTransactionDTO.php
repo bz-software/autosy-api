@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class CashTransactionDTO extends AbstractDTO
 {
     public function __construct(
-        public int $id,
+        public ?int $id,
         public ?int $id_workshop,
         public int $type,
         public int $category,
@@ -28,7 +28,7 @@ class CashTransactionDTO extends AbstractDTO
     public static function fromRequest(Request $request): self
     {
         return new self(
-            $request->input('id') ?? 0,
+            $request->input('id') ?? null,
             $request->input('idWorkshop'),
             $request->input('type'),
             $request->input('category'),
