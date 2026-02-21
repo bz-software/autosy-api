@@ -23,6 +23,6 @@ class SubscriptionPlanRepository extends AbstractRepository
     {
         return $this->model
             ->where('mercado_pago_plan_id', $mercadoPagoPlanId)
-            ->first();
+            ->first(); 
     }
 }
