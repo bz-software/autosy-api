@@ -9,6 +9,7 @@ use App\Http\Controllers\CashTransactionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\VehicleController;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -60,6 +61,10 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::prefix('subscriptions')->group(function () {
+        Route::post('/', [SubscriptionController::class, 'index']);
+    });
 });
 
 Route::prefix('appointments')->group(function () {
