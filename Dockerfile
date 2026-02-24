@@ -19,7 +19,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copiar o código da aplicação
-COPY ./backend /var/www/html
+COPY . /var/www/html
 
 # Instalar dependências do Laravel
 RUN composer install --no-interaction --optimize-autoloader --prefer-dist
