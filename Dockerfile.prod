@@ -1,23 +1,17 @@
 FROM php:8.2-fpm
 
-# Instala dependências do PHP necessárias
+# Instalar dependências do Laravel
 RUN apt-get update && apt-get install -y \
-    libpng-dev libonig-dev libxml2-dev zip unzip git curl \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd \
-    && apt-get clean
+    git unzip libonig-dev libxml2-dev zip curl \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath xml
 
-# Instala Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+# Instalar Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www
+WORKDIR /var/www/html
 
-COPY . .
+# Copiar Laravel e instalar dependências
+COPY ./ ./
+RUN composer install --optimize-autoloader --no-dev
 
-# Instala dependências sem dev e otimiza autoloader
-RUN composer install --no-dev --optimize-autoloader
-
-# Expose para PHP-FPM
-EXPOSE 9000
-
-# Comando padrão é o php-fpm
 CMD ["php-fpm"]
