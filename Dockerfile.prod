@@ -1,17 +1,35 @@
 FROM php:8.2-fpm
 
-# Instalar dependências do Laravel
+# Instalar dependências do sistema
 RUN apt-get update && apt-get install -y \
-    git unzip libonig-dev libxml2-dev zip curl \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath xml
+    git \
+    unzip \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    curl \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath xml \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copiar Laravel e instalar dependências
-COPY ./ ./
-RUN composer install --optimize-autoloader --no-dev
+# Copiar arquivos do projeto
+COPY . .
+
+# Instalar dependências do Laravel
+RUN composer install --no-dev --optimize-autoloader
+
+# Ajustar permissões
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
+
+# Cachear configs (produção)
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
 
 CMD ["php-fpm"]
