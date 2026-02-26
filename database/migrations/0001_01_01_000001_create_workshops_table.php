@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedTinyInteger('type')
                 ->comment('1 = Oficina Mecânica | 2 = Lava-jato | 3 = Estética Automotiva');
 
+            $table->string('phone_number');
+
             $table->timestamps();
         });
     }

@@ -41,6 +41,7 @@ class AuthService {
             $workshop = $this->workshopRepository->create([
                 'name' => strtoupper($dto->workshop_name),
                 'type' => $dto->workshop_type,
+                'phone_number' => $dto->phone_number
             ]);
 
             if (! $workshop || ! $workshop->id) {
