@@ -12,14 +12,12 @@ class Subscription extends Model
     protected $primaryKey = 'id_subscription';
 
     protected $fillable = [
-        'id_workshop',
+        'id_user',
         'id_subscription_plan',
-        'mercado_pago_subscription_id',
         'status',
         'current_period_start',
         'current_period_end',
-        'next_billing_at',
-        'external_reference',
+        'id_stripe_subscription'
     ];
 
     protected $casts = [
@@ -34,9 +32,9 @@ class Subscription extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function workshop(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Workshop::class, 'id_workshop', 'id');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
     public function plan(): BelongsTo

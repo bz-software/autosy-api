@@ -9,12 +9,22 @@ class SubscriptionController extends Controller
 {
     public function __construct(private Service $service){}
 
-    public function index(Request $request){
-        return $this->service->execute(
-            $request->user()->workshop->id,
-            'plano_basico_teste',
-            $request->input('email'),
-            $request->input('cardToken')
+    public function createCheckoutSession(Request $request){
+        return $this->service->createCheckoutSession(
+            $request->user()->id,
+            $request->user()->workshop->id
         );
+    }
+
+    public function getCheckoutSession(Request $request) {
+        return $this->service->getCheckoutSession(
+            $request->user()->id,
+            $request->user()->workshop->id,
+            $request->route('id')
+        );
+    }
+
+    public function stripeWebhook(Request $request){
+        $this->service->stripeWebhook($request);
     }
 }

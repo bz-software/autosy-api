@@ -63,8 +63,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::prefix('subscriptions')->group(function () {
-        Route::post('/', [SubscriptionController::class, 'index']);
+        Route::post('/checkout-session', [SubscriptionController::class, 'createCheckoutSession']);
+        Route::get('/checkout-session/{id}', [SubscriptionController::class, 'getCheckoutSession']);
     });
+});
+
+Route::prefix('stripe')->group(function () {
+    Route::post('/webhook', [SubscriptionController::class, 'stripeWebhook']);
 });
 
 Route::prefix('appointments')->group(function () {

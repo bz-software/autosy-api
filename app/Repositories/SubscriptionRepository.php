@@ -12,26 +12,11 @@ class SubscriptionRepository extends AbstractRepository
         parent::__construct($model);
     }
 
-    public function findActiveByWorkshop(int $idWorkshop): ?Subscription
-    {
+    public function findByIdStripeSubscription($id, $idUser){
         return $this->model
-            ->where('id_workshop', $idWorkshop)
-            ->where('status', SubscriptionStatus::AUTHORIZED->value)
+            ->where('id_stripe_subscription', $id)
+            ->where('id_user', $idUser)
             ->first();
-    }
-
-    public function findByMercadoPagoId(string $mercadoPagoSubscriptionId): ?Subscription
-    {
-        return $this->model
-            ->where('mercado_pago_subscription_id', $mercadoPagoSubscriptionId)
-            ->first();
-    }
-
-    public function updateByMercadoPagoId(string $mercadoPagoSubscriptionId, array $data): bool
-    {
-        return $this->model
-            ->where('mercado_pago_subscription_id', $mercadoPagoSubscriptionId)
-            ->update($data);
     }
 
     public function existsAuthorized(int $idWorkshop): bool
