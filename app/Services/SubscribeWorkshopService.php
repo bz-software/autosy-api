@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\DTOs\Subscription\SubscriptionDTO;
 use App\Enums\SubscriptionStatus;
+use App\Exceptions\ServiceException;
+use App\Models\Subscription;
 use App\Repositories\CustomerRepository;
 use App\Repositories\SubscriptionRepository;
 use App\Repositories\SubscriptionPlanRepository;
@@ -110,27 +113,75 @@ class SubscribeWorkshopService
             return response()->json(['error' => 'Invalid signature'], 400);
         }
 
-        switch ($event->type) {
-            case 'invoice.paid':
-                $this->handleInvoicePaid($event->data->object);
-                break;
+        try {
+            switch ($event->type) {
+                case 'invoice.paid':
+                    $this->handleInvoicePaid($event->data->object);
+                    break;
 
-            case 'invoice.payment_failed':
-                $this->handlePaymentFailed($event->data->object);
-                break;
+                case 'payment_intent.payment_failed ':
+                    $this->handlePaymentFailed($event->data->object);
+                    break;
 
-            case 'customer.subscription.deleted':
-                $this->handleSubscriptionDeleted($event->data->object);
-                break;
-        }
+                case "customer.subscription.created":
+                    $this->handleSubscriptionCreated($event->data->object);
+                    break;
+
+                case 'customer.subscription.deleted':
+                    $this->handleSubscriptionDeleted($event->data->object);
+                    break;
+
+                case "customer.subscription.updated":
+                    $this->handleInvoicePaid($event->data->object);
+                    break;
+            }
+        } catch (\Throwable $th) {
+            Log::error('Stripe Webhook Error: ' . $th->getMessage());
+            return response()->json(['error' => 'Invalid signature'], 400);
+        }   
 
         return response()->json(['received' => true]);
+    }
+
+    private function handleSubscriptionCreated($invoice){
+        $idStripeCustomer = $invoice->customer;
+        $idStripeSubscription = $invoice->id;
+
+        $user = $this->rUser->findByStripeCustomerId($idStripeCustomer);
+
+        if (!$user) {
+            throw new ServiceException([], 500, "User not found");
+        };
+
+        $plan = $this->rPlanRepository->findBySlug('plano_basico');
+
+        $subscription = new SubscriptionDTO(
+            null,
+            $user->id,
+            $plan->id,
+            SubscriptionStatus::PENDING,
+            null,
+            null,
+            null,
+            null,
+            $idStripeSubscription
+        );
+
+        return $this->rSubscription->create($subscription->toArray());
     }
 
     private function handleInvoicePaid($invoice)
     {
         $idStripeCustomer = $invoice->customer;
-        $idStripeSubscription = $invoice->subscription;
+        $idStripeSubscription = $invoice->parent->subscription_details->subscription ?? null;
+
+        if(empty($idStripeSubscription)){
+            throw new ServiceException([], 400, "Subscription not found (payload)");
+        }
+
+        if($invoice->status != 'paid'){
+            throw new ServiceException([], 400, "Subscription not paid");
+        }
 
         $user = $this->rUser->findByStripeCustomerId($idStripeCustomer);
 
@@ -139,23 +190,33 @@ class SubscribeWorkshopService
         $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription, $user->id);
         $plan = $this->rPlanRepository->findBySlug('plano_basico');
 
-        if(!empty($subscription)){
-            $subscription->status = SubscriptionStatus::AUTHORIZED;
-
-            $subscription->id_subscription_plan = $plan->id;
-
-            $subscription->current_period_start = date(
-                'Y-m-d H:i:s',
-                $invoice->lines->data[0]->period->start
-            );
-
-            $subscription->current_period_end = date(
-                'Y-m-d H:i:s',
-                $invoice->lines->data[0]->period->end
-            );
-
-            return $this->rSubscription->update($subscription->id, $subscription->toArray());
+        if(empty($subscription)){
+            throw new ServiceException([], 400, "Subscription not found");
         }
+
+        $subscription->status = SubscriptionStatus::AUTHORIZED;
+
+        $subscription->id_subscription_plan = $plan->id;
+
+        if(empty($invoice->lines->data[0]->period->start)){
+            throw new ServiceException([], 400, "Period start not found");
+        }
+
+        if(empty($invoice->lines->data[0]->period->end)){
+            throw new ServiceException([], 400, "Period end not found");
+        }
+
+        $subscription->current_period_start = date(
+            'Y-m-d H:i:s',
+            $invoice->lines->data[0]->period->start
+        );
+
+        $subscription->current_period_end = date(
+            'Y-m-d H:i:s',
+            $invoice->lines->data[0]->period->end
+        );
+
+        return $this->rSubscription->update($subscription->id, $subscription->toArray());
     }
 
     private function handlePaymentFailed($invoice)

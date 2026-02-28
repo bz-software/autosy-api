@@ -9,8 +9,6 @@ class Subscription extends Model
 {
     protected $table = 'subscriptions';
 
-    protected $primaryKey = 'id_subscription';
-
     protected $fillable = [
         'id_user',
         'id_subscription_plan',
