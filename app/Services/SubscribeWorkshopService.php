@@ -26,6 +26,10 @@ class SubscribeWorkshopService
         private UserRepository $rUser
     ) {}
 
+    public function getCurrent($idUser) {
+        return $this->rSubscription->getByUser($idUser);
+    }
+
     public function createCheckoutSession($idUser, $idWorkshop){
         Stripe::setApiKey(config('services.stripe.token'));
 

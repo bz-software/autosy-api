@@ -26,4 +26,10 @@ class SubscriptionRepository extends AbstractRepository
             ->where('status', SubscriptionStatus::AUTHORIZED->value)
             ->exists();
     }
+
+    public function getByUser(int $idUser) {
+        return $this->model->with('plan')
+            ->where('id_user', $idUser)
+            ->first();
+    }
 }

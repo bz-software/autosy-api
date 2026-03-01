@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Subscription\SubscriptionResource;
 use App\Services\SubscribeWorkshopService as Service;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
     public function __construct(private Service $service){}
+
+    public function getCurrent(Request $request){
+        return new SubscriptionResource(
+            $this->service->getCurrent(
+                $request->user()->id
+            )
+        );
+    }
 
     public function createCheckoutSession(Request $request){
         return $this->service->createCheckoutSession(

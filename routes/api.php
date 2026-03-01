@@ -65,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('subscriptions')->group(function () {
         Route::post('/checkout-session', [SubscriptionController::class, 'createCheckoutSession']);
         Route::get('/checkout-session/{id}', [SubscriptionController::class, 'getCheckoutSession']);
+        Route::get('/current', [SubscriptionController::class, 'getCurrent']);
     });
 });
 
