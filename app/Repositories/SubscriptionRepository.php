@@ -27,7 +27,7 @@ class SubscriptionRepository extends AbstractRepository
             ->exists();
     }
 
-    public function getByUser(int $idUser) {
+    public function findByUser(int $idUser) {
         return $this->model->with('plan')
             ->where('id_user', $idUser)
             ->first();

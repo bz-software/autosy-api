@@ -18,6 +18,12 @@ class SubscriptionController extends Controller
         );
     }
 
+    public function cancel(Request $request){
+        return $this->service->cancel(
+            $request->user()->id
+        );
+    }
+
     public function createCheckoutSession(Request $request){
         return $this->service->createCheckoutSession(
             $request->user()->id,

@@ -27,7 +27,25 @@ class SubscribeWorkshopService
     ) {}
 
     public function getCurrent($idUser) {
-        return $this->rSubscription->getByUser($idUser);
+        return $this->rSubscription->findByUser($idUser);
+    }
+
+    public function cancel($idUser) {
+        $subscription = $this->rSubscription->findByUser($idUser);
+
+        if(empty($subscription)){
+            throw new ServiceException([], 400, "Assinatura não encontrada");
+        }
+        
+        $stripe = new \Stripe\StripeClient(config('services.stripe.token'));
+
+        try {
+            $stripe->subscriptions->cancel($subscription->id_stripe_subscription, []);
+
+            return response()->noContent(200);
+        } catch (\Throwable $th) {
+            throw new ServiceException([], 400, $th->getMessage());
+        }
     }
 
     public function createCheckoutSession($idUser, $idWorkshop){
@@ -65,20 +83,6 @@ class SubscribeWorkshopService
             'payment_status' => $session->payment_status,
         ]);
     }
-    
-    // public function stripeWebhook(Request $request){
-    //     $payload = $request->all();  
-
-    //     try {
-    //         $event = \Stripe\Event::constructFrom(
-    //             $payload
-    //         );
-    //     } catch (\Throwable $th) {
-    //         $th->getMessage();   
-    //     }
-
-    //     return response()->json(['received' => true]);
-    // }
 
     private function createCustomerIfNotExists($idUser){
         Stripe::setApiKey(config('services.stripe.token'));
@@ -132,7 +136,7 @@ class SubscribeWorkshopService
                     break;
 
                 case 'customer.subscription.deleted':
-                    $this->handleSubscriptionDeleted($event->data->object);
+                    $this->handleSubscriptionDeleted($event->data->object, $request->user()->id);
                     break;
 
                 case "customer.subscription.updated":
@@ -231,9 +235,12 @@ class SubscribeWorkshopService
         //     ->update(['status' => 'past_due']);
     }
 
-    private function handleSubscriptionDeleted($subscription)
+    private function handleSubscriptionDeleted($invoice, $idUser)
     {
-        // Subscription::where('stripe_subscription_id', $subscription->id)
-        //     ->update(['status' => 'canceled']);
+        // $idStripeSubscription = $invoice->id;
+
+        // $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription, $idUser);
+
+        // if($invoice->status == )
     }
 }
