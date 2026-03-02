@@ -127,7 +127,7 @@ class SubscribeWorkshopService
                     $this->handleInvoicePaid($event->data->object);
                     break;
 
-                case 'payment_intent.payment_failed ':
+                case 'invoice.payment_failed':
                     $this->handlePaymentFailed($event->data->object);
                     break;
 
@@ -136,7 +136,7 @@ class SubscribeWorkshopService
                     break;
 
                 case 'customer.subscription.deleted':
-                    $this->handleSubscriptionDeleted($event->data->object, $request->user()->id);
+                    $this->handleSubscriptionDeleted($event->data->object);
                     break;
 
                 case "customer.subscription.updated":
@@ -195,7 +195,7 @@ class SubscribeWorkshopService
 
         if (!$user) return;
 
-        $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription, $user->id);
+        $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription);
         $plan = $this->rPlanRepository->findBySlug('plano_basico');
 
         if(empty($subscription)){
@@ -229,18 +229,23 @@ class SubscribeWorkshopService
 
     private function handlePaymentFailed($invoice)
     {
-        $subscriptionId = $invoice->subscription;
+        $idStripeSubscription = $invoice->id;
 
+        $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription);
         // Subscription::where('stripe_subscription_id', $subscriptionId)
         //     ->update(['status' => 'past_due']);
     }
 
-    private function handleSubscriptionDeleted($invoice, $idUser)
+    private function handleSubscriptionDeleted($invoice,)
     {
-        // $idStripeSubscription = $invoice->id;
+        $idStripeSubscription = $invoice->id;
 
-        // $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription, $idUser);
+        $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription);
 
-        // if($invoice->status == )
+        if($invoice->status == 'canceled'){
+            $subscription->status = SubscriptionStatus::CANCELLED->value;
+
+            return $this->rSubscription->update($subscription->id, $subscription->toArray());
+        }
     }
 }

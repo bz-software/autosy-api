@@ -11,11 +11,17 @@ class SubscriptionController extends Controller
     public function __construct(private Service $service){}
 
     public function getCurrent(Request $request){
-        return new SubscriptionResource(
-            $this->service->getCurrent(
-                $request->user()->id
-            )
+        $subscription = $this->service->getCurrent(
+            $request->user()->id
         );
+
+        if(!empty($subscription)){
+            return new SubscriptionResource(
+                $subscription      
+            );
+        }
+
+        return response()->noContent();
     }
 
     public function cancel(Request $request){

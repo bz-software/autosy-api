@@ -12,10 +12,9 @@ class SubscriptionRepository extends AbstractRepository
         parent::__construct($model);
     }
 
-    public function findByIdStripeSubscription($id, $idUser){
+    public function findByIdStripeSubscription($id){
         return $this->model
             ->where('id_stripe_subscription', $id)
-            ->where('id_user', $idUser)
             ->first();
     }
 
