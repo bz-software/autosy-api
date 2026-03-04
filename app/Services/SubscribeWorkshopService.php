@@ -317,6 +317,10 @@ class SubscribeWorkshopService
 
         $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription);
 
+        if(empty($subscription)){
+            throw new ServiceException([], 400, "Subscription not found (customer.subscription.deleted)");
+        }
+
         if($invoice->status == 'canceled'){
             $subscription->status = SubscriptionStatus::CANCELLED->value;
 
