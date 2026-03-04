@@ -110,11 +110,15 @@ class SubscribeWorkshopService
 
     public function stripeWebhook(Request $request)
     {
-        $payload = $request->all();  
-
         try {
-            $event = \Stripe\Event::constructFrom(
-                $payload
+            $payload = $request->getContent();
+            $signature = $request->header('Stripe-Signature');
+            $secret = config('services.stripe.webhook_secret');
+
+            $event = \Stripe\Webhook::constructEvent(
+                $payload,
+                $signature,
+                $secret
             );
         } catch (\Exception $e) {
             Log::error('Stripe Webhook Error: ' . $e->getMessage());
@@ -140,7 +144,7 @@ class SubscribeWorkshopService
                     break;
 
                 case "customer.subscription.updated":
-                    $this->handleInvoicePaid($event->data->object);
+                    $this->handleSubscriptionUpdated($event->data->object);
                     break;
             }
         } catch (\Throwable $th) {
@@ -163,19 +167,33 @@ class SubscribeWorkshopService
 
         $plan = $this->rPlanRepository->findBySlug('plano_basico');
 
-        $subscription = new SubscriptionDTO(
-            null,
-            $user->id,
-            $plan->id,
-            SubscriptionStatus::PENDING,
-            null,
-            null,
-            null,
-            null,
-            $idStripeSubscription
-        );
+        $subscription = $this->rSubscription->findByUser($user->id);
 
-        return $this->rSubscription->create($subscription->toArray());
+        if(empty($subscription)){  
+            $subscription = new SubscriptionDTO(
+                null,
+                $user->id,
+                $plan->id,
+                SubscriptionStatus::PENDING,
+                null,
+                null,
+                null,
+                null,
+                $idStripeSubscription
+            );
+    
+            return $this->rSubscription->create($subscription->toArray());
+        }else{
+            // TODO: Futuramente criar um novo ao invés de atualizar.
+            $subscription->id_subscription_plan = $plan->id;
+            $subscription->current_period_start = null;
+            $subscription->current_period_end = null;
+            $subscription->status = SubscriptionStatus::PENDING;
+            $subscription->id_stripe_subscription = $idStripeSubscription;
+
+            return $this->rSubscription->update($subscription->id, $subscription->toArray());
+        }
+
     }
 
     private function handleInvoicePaid($invoice)
@@ -229,14 +247,71 @@ class SubscribeWorkshopService
 
     private function handlePaymentFailed($invoice)
     {
-        $idStripeSubscription = $invoice->id;
+        $idStripeSubscription = $invoice->subscription ?? null;
+
+        if (empty($idStripeSubscription)) {
+            Log::warning('Stripe: subscription not found in payment_failed payload');
+            return;
+        }
 
         $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription);
-        // Subscription::where('stripe_subscription_id', $subscriptionId)
-        //     ->update(['status' => 'past_due']);
+
+        if (empty($subscription)) {
+            Log::warning("Stripe: local subscription not found");
+            return;
+        }
+
+        // Marca como em atraso
+        $subscription->status = SubscriptionStatus::PAYMENT_FAILED->value;
+
+        //salvar data da falha
+        // $subscription->last_payment_failed_at = now();
+
+        // salvar próxima tentativa
+        // if (!empty($invoice->next_payment_attempt)) {
+        //     $subscription->next_payment_attempt = date(
+        //         'Y-m-d H:i:s',
+        //         $invoice->next_payment_attempt
+        //     );
+        // }
+
+        $this->rSubscription->update($subscription->id, $subscription->toArray());
+        Log::info("Stripe: payment failed for subscription {$idStripeSubscription}");
     }
 
-    private function handleSubscriptionDeleted($invoice,)
+    public function handleSubscriptionUpdated($payload){
+        $idStripeSubscription = $payload->id ?? null;
+
+        if (empty($idStripeSubscription)) {
+            throw new ServiceException([], 400, "Subscription not found (customer.subscription.updated)");
+        }
+
+        $subscription = $this->rSubscription->findByIdStripeSubscription($idStripeSubscription);
+
+        if(empty($subscription)){
+            throw new ServiceException([], 400, "Subscription not found (database)");
+        }
+
+        if($payload->status == 'past_due'){
+            $subscription->status = SubscriptionStatus::PAYMENT_FAILED->value;
+        }
+
+        if($payload->status == 'active'){
+            $subscription->status = SubscriptionStatus::AUTHORIZED->value;
+        }
+
+        if($payload->status == 'canceled'){
+            $subscription->status = SubscriptionStatus::CANCELLED->value;
+        }
+        
+        if($payload->status == 'unpaid'){
+            $subscription->status = SubscriptionStatus::PAYMENT_FAILED->value;
+        }
+
+        return $this->rSubscription->update($subscription->id, $subscription->toArray());
+    }
+
+    private function handleSubscriptionDeleted($invoice)
     {
         $idStripeSubscription = $invoice->id;
 
