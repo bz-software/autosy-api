@@ -67,6 +67,7 @@ Route::middleware(['auth:sanctum', 'subscription.active'])->group(function () {
         Route::get('/checkout-session/{id}', [SubscriptionController::class, 'getCheckoutSession']);
         Route::get('/current', [SubscriptionController::class, 'getCurrent']);
         Route::post('/cancel', [SubscriptionController::class, 'cancel']);
+        Route::post('/portal', [SubscriptionController::class, 'createCustomerPortal']);
     });
 });
 

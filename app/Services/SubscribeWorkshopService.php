@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\Checkout\Session;
+use Stripe\BillingPortal\Session as PortalSession;
 
 class SubscribeWorkshopService
 {
@@ -24,7 +25,8 @@ class SubscribeWorkshopService
     ) {}
 
     public function getCurrent($idUser) {
-        return $this->rSubscription->findByUser($idUser);
+        $user = $this->rUser->findById($idUser);
+        return self::resolveUserSubscription($user);
     }
 
     public function cancel($idUser) {
@@ -43,6 +45,27 @@ class SubscribeWorkshopService
         } catch (\Throwable $th) {
             throw new ServiceException([], 400, $th->getMessage());
         }
+    }
+
+    public function createCustomerPortal($idUser) {
+        Stripe::setApiKey(config('services.stripe.token'));
+
+        $user = $this->rUser->findById($idUser);
+
+        if (!$user->id_customer_stripe) {
+            throw new ServiceException([], 400, "Customer Stripe não encontrado");
+        }
+
+        $frontUrl = config('services.frontend.url');
+
+        $session = PortalSession::create([
+            'customer' => $user->id_customer_stripe,
+            'return_url' => $frontUrl . '/conta'
+        ]);
+
+        return response()->json([
+            'url' => $session->url
+        ]);
     }
 
     public function createCheckoutSession($idUser, $idWorkshop){
@@ -82,9 +105,9 @@ class SubscribeWorkshopService
 
         return (object) [
             'trial' => true,
-            'current_period_start' => $user->created_at->format('Y-m-d H:i:s'),
-            'current_period_end' => $ends->format('Y-m-d H:i:s'),
-            'days_left' => max((int) ceil($daysLeft), 0)
+            'periodStart' => $user->created_at->format('Y-m-d H:i:s'),
+            'periodEnd' => $ends->format('Y-m-d H:i:s'),
+            'daysLeft' => max((int) ceil($daysLeft), 0)
         ];
     }
 

@@ -20,7 +20,8 @@ class SubscriptionResource extends JsonResource
             'status' => $this->status ?? null,
             'periodStart' => $this->current_period_start?->format('Y-m-d H:i:s') ?? null,
             'periodEnd' => $this->current_period_end?->format('Y-m-d H:i:s') ?? null,
-            'plan' => new SubscriptionPlanResource($this->plan)
+            'plan' => new SubscriptionPlanResource($this->plan),
+            'daysLeft' => $this->days_left
         ];
     }
 }

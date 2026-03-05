@@ -11,21 +11,19 @@ class SubscriptionController extends Controller
     public function __construct(private Service $service){}
 
     public function getCurrent(Request $request){
-        $subscription = $this->service->getCurrent(
+        return $this->service->getCurrent(
             $request->user()->id
         );
-
-        if(!empty($subscription)){
-            return new SubscriptionResource(
-                $subscription      
-            );
-        }
-
-        return response()->noContent();
     }
 
     public function cancel(Request $request){
         return $this->service->cancel(
+            $request->user()->id
+        );
+    }
+
+    public function createCustomerPortal(Request $request){
+        return $this->service->createCustomerPortal(
             $request->user()->id
         );
     }
