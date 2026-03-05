@@ -24,6 +24,21 @@ class Subscription extends Model
         'next_billing_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'days_left'
+    ];
+
+    public function getDaysLeftAttribute()
+    {
+        if (!$this->current_period_end) {
+            return null;
+        }
+
+        $days = now()->diffInDays($this->current_period_end, false);
+
+        return max((int) ceil($days), 0);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationships

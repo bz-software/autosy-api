@@ -16,6 +16,8 @@ class EnsureSubscriptionIsActive
 
     public function handle(Request $request, Closure $next)
     {
+        $trialDays = config('services.autosy.trial_days');
+
         $user = $request->user();
 
         if (!$user) {
@@ -28,8 +30,7 @@ class EnsureSubscriptionIsActive
          * NÃO TEM ASSINATURA → verificar trial de 30 dias
          */
         if (!$subscription) {
-
-            $trialLimit = Carbon::parse($user->created_at)->addDays(30);
+            $trialLimit = Carbon::parse($user->created_at)->addDays($trialDays);
 
             if (Carbon::now()->lessThanOrEqualTo($trialLimit)) {
                 return $next($request);

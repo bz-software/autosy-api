@@ -14,7 +14,7 @@ class UserRepository extends AbstractRepository
     {
         return $this->model
             ->when($withWorkshop, function ($query) {
-                $query->with('workshop');
+                $query->with(['workshop', 'subscription']);
             })
             ->where('phone_number', $phoneNumber)
             ->first();

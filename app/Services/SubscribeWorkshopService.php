@@ -5,18 +5,15 @@ namespace App\Services;
 use App\DTOs\Subscription\SubscriptionDTO;
 use App\Enums\SubscriptionStatus;
 use App\Exceptions\ServiceException;
-use App\Models\Subscription;
-use App\Repositories\CustomerRepository;
+use App\Http\Resources\Subscription\SubscriptionResource;
 use App\Repositories\SubscriptionRepository;
 use App\Repositories\SubscriptionPlanRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\Checkout\Session;
-use Stripe\Webhook;
 
 class SubscribeWorkshopService
 {
@@ -71,6 +68,24 @@ class SubscribeWorkshopService
         return response()->json([
             'clientSecret' => $session->client_secret
         ]);
+    }
+
+    public static function resolveUserSubscription($user){
+        if (!empty($user->subscription)) {
+            return new SubscriptionResource($user->subscription);
+        }
+
+        $trialDays = config('services.autosy.trial_days');
+        $ends = $user->created_at->copy()->addDays($trialDays);
+
+        $daysLeft = now()->diffInDays($ends, false);
+
+        return (object) [
+            'trial' => true,
+            'current_period_start' => $user->created_at->format('Y-m-d H:i:s'),
+            'current_period_end' => $ends->format('Y-m-d H:i:s'),
+            'days_left' => max((int) ceil($daysLeft), 0)
+        ];
     }
 
     public function getCheckoutSession($idUser, $idWorkshop, $token){

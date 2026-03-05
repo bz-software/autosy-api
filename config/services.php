@@ -42,6 +42,10 @@ return [
     'stripe' => [
         'token' => env('STRIPE_SECRECT_KEY'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET')
+    ],
+
+    'autosy' => [
+        'trial_days' => 14
     ]
 
 ];
