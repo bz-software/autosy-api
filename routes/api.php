@@ -15,7 +15,7 @@ use App\Http\Controllers\VehicleController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'subscription.active'])->group(function () {
     Route::get('/me', fn (Request $request) => $request->user());
     Route::post('/logout', [AuthController::class, 'logout']);
 
