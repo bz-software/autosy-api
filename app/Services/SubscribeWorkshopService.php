@@ -346,6 +346,12 @@ class SubscribeWorkshopService
             $subscription->status = SubscriptionStatus::PAYMENT_FAILED->value;
         }
 
+        if(boolval($payload->cancel_at_period_end) == true || !empty($payload->cancel_at)){
+            $subscription->cancel_at_period_end = true;
+        }else{
+            $subscription->cancel_at_period_end = false;
+        }
+
         return $this->rSubscription->update($subscription->id, $subscription->toArray());
     }
 

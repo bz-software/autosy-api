@@ -21,7 +21,8 @@ class SubscriptionResource extends JsonResource
             'periodStart' => $this->current_period_start?->format('Y-m-d H:i:s') ?? null,
             'periodEnd' => $this->current_period_end?->format('Y-m-d H:i:s') ?? null,
             'plan' => new SubscriptionPlanResource($this->plan),
-            'daysLeft' => $this->days_left
+            'daysLeft' => $this->days_left,
+            'cancelAtPeriodEnd' => boolval($this->cancel_at_period_end)
         ];
     }
 }
