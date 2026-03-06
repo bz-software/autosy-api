@@ -39,8 +39,9 @@ class AuthService {
     public function signup(SignupDTO $dto){
         return DB::transaction(function () use ($dto) {
             $workshop = $this->workshopRepository->create([
-                'name' => strtoupper($dto->workshop_name),
+                'name' => mb_strtoupper($dto->workshop_name, 'UTF-8'),
                 'type' => $dto->workshop_type,
+                'phone_number' => $dto->phone_number
             ]);
 
             if (! $workshop || ! $workshop->id) {
@@ -48,7 +49,7 @@ class AuthService {
             }
 
             $user = $this->repository->create([
-                'name' => strtoupper($dto->name),
+                'name' => mb_strtoupper($dto->name, 'UTF-8'),
                 'phone_number' => $dto->phone_number,
                 'password' => Hash::make($dto->password),
                 'id_workshop' => $workshop->id

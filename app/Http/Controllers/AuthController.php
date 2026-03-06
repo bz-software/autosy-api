@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\DTOs\AuthDTO;
 use App\DTOs\SignupDTO;
-use App\Http\Requests\AuthRequest;
+use App\Http\Requests\Auth\AuthRequest;
 use App\Http\Resources\Auth\AuthResource;
 use App\Services\AuthService as Service;
-use App\Http\Requests\SignupRequest;
+use App\Http\Requests\Auth\SignupRequest;
 
 class AuthController extends Controller
 {

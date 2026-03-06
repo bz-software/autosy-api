@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTOs\AppointmentDTO;
 use App\DTOs\ServiceDTO;
-use App\Http\Requests\StoreServiceRequest;
+use App\Http\Requests\Service\StoreServiceRequest;
 use App\Http\Resources\Service\ServiceResource;
 use App\Services\ServiceService as Service;
 use Illuminate\Http\Request;

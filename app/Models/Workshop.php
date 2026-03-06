@@ -14,7 +14,8 @@ class Workshop extends Model
     protected $fillable = [
         'name',
         'id_user',
-        'type'
+        'type',
+        'phone_number'
     ];
 
     /**

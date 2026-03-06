@@ -110,6 +110,11 @@ class CashTransaction extends Model
         ]);
     }
 
+    public function scopeOrderByDate(Builder $query, string $direction = 'desc'): Builder
+    {
+        return $query->orderBy('transaction_date', $direction);
+    }
+
     /*
      |--------------------------------------------------------------------------
      | Helpers

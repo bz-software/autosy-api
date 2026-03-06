@@ -3,22 +3,27 @@ namespace App\Repositories;
 
 use App\Models\User;
 
-class UserRepository
+class UserRepository extends AbstractRepository
 {
-    public function __construct(private User $model) {}
+    public function __construct(User $model)
+    {
+        parent::__construct($model);
+    }
 
     public function getByPhone(string $phoneNumber, bool $withWorkshop = false)
     {
         return $this->model
             ->when($withWorkshop, function ($query) {
-                $query->with('workshop');
+                $query->with(['workshop', 'subscription']);
             })
             ->where('phone_number', $phoneNumber)
             ->first();
     }
 
-    public function create($user){
-        return $this->model->create($user);
+    public function findByStripeCustomerId($id){
+        return $this->model
+            ->where('id_customer_stripe', $id)
+            ->first();
     }
 }
 

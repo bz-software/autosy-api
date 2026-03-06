@@ -18,7 +18,8 @@ class WorkshopResource extends JsonResource
             "id" => $this->id ?? null,
             "name" => $this->name ?? null,
             "idUser" => $this->id_user ?? null,
-            "type" => $this->type
+            "type" => $this->type,
+            "phoneNumber" => $this->phone_number
         ];
     }
 }

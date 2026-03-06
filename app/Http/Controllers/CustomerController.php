@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\CustomerDTO;
-use App\Http\Requests\SearchCustomerRequest;
-use App\Http\Requests\StoreCustomerRequest;
-use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Requests\Customer\SearchCustomerRequest;
+use App\Http\Requests\Customer\StoreCustomerRequest;
+use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\Customer\CustomerResource;
 use App\Services\CustomerService as Service;
 use Illuminate\Http\Request;

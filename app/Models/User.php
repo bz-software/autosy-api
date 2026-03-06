@@ -22,7 +22,8 @@ class User extends Authenticatable
         'name',
         'phone_number',
         'password',
-        'id_workshop'
+        'id_workshop',
+        'id_customer_stripe'
     ];
 
     /**
@@ -63,6 +64,10 @@ class User extends Authenticatable
     public function workshop()
     {
         return $this->belongsTo(Workshop::class, 'id_workshop');
+    }
+
+    public function subscription(){
+        return $this->hasOne(Subscription::class, 'id_user');
     }
 
     public function cashTransactionsCreated()

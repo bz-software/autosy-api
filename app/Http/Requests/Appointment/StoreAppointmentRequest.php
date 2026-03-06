@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Appointment;
 
+use App\Http\Requests\AbstractFormRequest;
 use App\Enums\WorkshopType;
 use Illuminate\Validation\Rule;
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\DTOs\AppointmentDTO;
 use App\Services\AppointmentService as Service;
-use App\Http\Requests\StoreAppointmentRequest;
 use App\Http\Resources\Appointment\AppointmentWithDetailsResource;
 use Illuminate\Http\Request;
 
@@ -70,9 +69,29 @@ class AppointmentController extends Controller
         );
     }
 
+    public function awaitPayment(Request $request){
+        return new AppointmentWithDetailsResource( 
+            $this->service->awaitPayment(
+                $request->route('id'),
+                $request->user()->workshop->id
+            )
+        );
+    }
+
     public function finalize(Request $request){
         return new AppointmentWithDetailsResource( 
             $this->service->finalize(
+                $request->route('id'),
+                $request->user()->workshop->id,
+                $request->user()->id,
+                $request->input('paymentMethod')
+            )
+        );
+    }
+
+    public function byCustomer(Request $request){
+        return AppointmentWithDetailsResource::collection( 
+            $this->service->byCustomer(
                 $request->route('id'),
                 $request->user()->workshop->id
             )

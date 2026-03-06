@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Appointment;
 
 use App\Http\Resources\AppointmentService\AppointmentServiceResource;
+use App\Http\Resources\CashTransaction\CashTransactionResource;
 use App\Http\Resources\Customer\CustomerResource;
 use App\Http\Resources\Vehicle\VehicleResource;
 use App\Http\Resources\Workshop\WorkshopResource;
@@ -24,13 +25,14 @@ class AppointmentWithDetailsResource extends JsonResource
             'idCustomer' => $this->id_customer ?? null,
             'idVehicle' => $this->id_vehicle ?? null,
             'licensePlate' => $this->license_plate ?? null,
-            'date' => '2026-01-27',
+            'date' => $this->appointment_date->format('Y-m-d'),
             'status' => intval($this->status) ?? null,
             'notes' => $this->notes ?? null,
             'customer' => new CustomerResource($this->customer),
             'vehicle' => new VehicleResource($this->vehicle),
             'services' => AppointmentServiceResource::collection($this->services),
-            'workshop' => new WorkshopResource($this->workshop)
+            'workshop' => new WorkshopResource($this->workshop),
+            'cashTransaction' => new CashTransactionResource($this->cashTransaction)
         ];
     }
 }

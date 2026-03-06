@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Vehicle;
 
+use App\Http\Requests\AbstractFormRequest;
 use Illuminate\Validation\Rule;
 
 class StoreVehicleRequest extends AbstractFormRequest
