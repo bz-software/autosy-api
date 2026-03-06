@@ -97,13 +97,4 @@ class AppointmentController extends Controller
             )
         );
     }
-
-    public function byCustomer(Request $request){
-        return AppointmentWithDetailsResource::collection( 
-            $this->service->byCustomer(
-                $request->route('id'),
-                $request->user()->workshop->id
-            )
-        );
-    }
 }
