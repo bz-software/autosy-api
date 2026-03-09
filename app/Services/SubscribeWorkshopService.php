@@ -73,6 +73,8 @@ class SubscribeWorkshopService
 
         $idUserStripe = $this->createCustomerIfNotExists($idUser, $idWorkshop);
 
+        $plan = $this->rPlanRepository->findBySlug('plano_basico');
+
         $session = Session::create([
             'mode' => 'subscription',
             'customer' => $idUserStripe,
@@ -80,7 +82,7 @@ class SubscribeWorkshopService
             'ui_mode' => 'embedded',
             'line_items' => [
                 [
-                    'price' => 'price_1T41VF3fdGANyAFQZCqjemm8', // passar pra tabela plans
+                    'price' => $plan->id_stripe_price, // passar pra tabela plans
                     'quantity' => 1,
                 ],
             ],
