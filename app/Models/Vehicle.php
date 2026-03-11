@@ -16,7 +16,11 @@ class Vehicle extends Model
     protected function licensePlate(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => mb_strtoupper($value, 'UTF-8')
+            set: function ($value) {
+                $plate = mb_strtoupper($value, 'UTF-8');
+
+                return preg_replace('/[^A-Z0-9]/', '', $plate);
+            }
         );
     }
 
