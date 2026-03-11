@@ -14,10 +14,10 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user');
             $table->unsignedBigInteger('id_subscription_plan');
 
-            // ID da assinatura no Mercado Pago
-            $table->string('id_stripe_subscription')->nullable()->unique();
+            // ID da assinatura no Stripe
+            $table->string('id_stripe_subscription', 150)->unique();
 
-            // authorized | paused | cancelled | payment_failed
+            // pending | authorized | paused | cancelled | payment_failed
             $table->string('status')->default('pending');
 
             $table->timestamp('current_period_start')->nullable();
@@ -31,13 +31,12 @@ return new class extends Migration
             $table->foreign('id_user')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->foreign('id_subscription_plan')
-                ->references('id_subscription_plan')
+                ->references('id')
                 ->on('subscription_plans')
-                ->onDelete('cascade');
-
+                ->cascadeOnDelete();
         });
     }
 
