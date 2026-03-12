@@ -18,7 +18,8 @@ class VehicleResource extends JsonResource
             'id' => $this->id ?? null,
             'idCustomer' => $this->id_customer ?? null,
             'licensePlate' => $this->license_plate ?? null,
-            'model' => $this->model ?? null
+            'model' => $this->model ?? null,
+            'idOwner' => $this->id_owner ?? false
         ];
     }
 }

@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 class CustomerService {
     public function __construct(
         private CustomerRepository $repository,
-        private WorkshopCustomerRepository $rWorkshopCustomer
     ) {}
 
     public function store(CustomerDTO $customerDto, $idWorkshop){

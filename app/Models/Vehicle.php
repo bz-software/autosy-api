@@ -4,13 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-
 class Vehicle extends Model
 {
     protected $fillable = [
         'license_plate',
         'model'
     ];
+
+    protected $appends = [
+        'id_owner'
+    ];
+
+    public function getidOwnerAttribute()
+    {
+        $owner = $this->owner()->first();
+
+        return $owner->id_customer ?? null;
+    }
 
     protected function licensePlate(): Attribute
     {
@@ -50,5 +60,11 @@ class Vehicle extends Model
     public function appointments()
     {
         return $this->hasMany(Appointment::class, 'id_vehicle');
+    }
+
+    public function owner()
+    {
+        return $this->hasOne(VehicleOwner::class, 'id_vehicle')
+            ->whereNull('end_date');
     }
 }

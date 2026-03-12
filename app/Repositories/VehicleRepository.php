@@ -30,13 +30,5 @@ class VehicleRepository extends AbstractRepository
 
         return $customers;
     }
-
-
-    public function byIdAndCustomer($id, $idCustomer){
-        return $this->model
-            ->where('id_customer', $idCustomer)
-            ->where('id', $id)
-        ->first();
-    }
 }
 

@@ -77,13 +77,7 @@ class AppointmentService {
             throw new ServiceException([], 500, "Falha ao agendar");
         }
 
-        $customerWorkshopDTO = new WorkshopCustomerDTO(
-            null,
-            $idWorkshop,
-            $dto->id_customer
-        );
-
-        $this->rWorkshopCustomer->create($customerWorkshopDTO->toArray());
+        $this->createWorkshopCustomer($dto->id_customer, $idWorkshop);
 
         return $this->repository->withDetails($appointment->id);
     }
@@ -97,7 +91,7 @@ class AppointmentService {
             throw new ServiceException(['idCustomer' => "Cliente não encontrado"]);
         }
 
-        if(empty($this->rVehicle->byIdAndCustomer($dto->id_vehicle, $dto->id_customer))){
+        if(empty($this->rVehicle->findById($dto->id_vehicle))){
             throw new ServiceException(['idVehicle' => "Veículo não encontrado"]);
         }
 
@@ -131,6 +125,8 @@ class AppointmentService {
                     throw new ServiceException([], 500, "Falha ao agendar (item)");
                 }
             }
+
+            $this->createWorkshopCustomer($dto->id_customer, $idWorkshop);
 
             return $this->repository->withDetails($appointment->id);
         });
@@ -337,6 +333,20 @@ class AppointmentService {
         }
 
         return $this->repository->byCustomer($idCustomer);
+    }
+
+    public function createWorkshopCustomer($idCustomer, $idWorkshop){
+        if(!empty($this->rWorkshopCustomer->find($idCustomer, $idWorkshop))){
+            return true;
+        }
+
+        $customerWorkshopDTO = new WorkshopCustomerDTO(
+            null,
+            $idWorkshop,
+            $idCustomer
+        );
+
+        return $this->rWorkshopCustomer->create($customerWorkshopDTO->toArray());
     }
 }
 

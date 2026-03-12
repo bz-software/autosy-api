@@ -9,5 +9,12 @@ class WorkshopCustomerRepository extends AbstractRepository
     {
         parent::__construct($model);
     }
+
+    public function find($idCustomer, $idWorkshop){
+        return $this->model
+            ->where('id_customer', $idCustomer)
+            ->where('id_workshop', $idWorkshop)
+        ->first();
+    }
 }
 
