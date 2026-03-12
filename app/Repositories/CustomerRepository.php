@@ -55,6 +55,7 @@ class CustomerRepository
 
     public function countByWorkshop($idWorkshop){
         return $this->model
+        ->fromWorkshop($idWorkshop)
         ->count();
     }
 
