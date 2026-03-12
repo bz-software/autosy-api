@@ -42,6 +42,17 @@ class CustomerRepository
         return $customers;
     }
 
+    public function searchInWorkshopByParams(CustomerDTO $params, $idWorkshop){
+        $customers = $this->model::query()
+            ->fromWorkshop($idWorkshop)
+            ->when($params->phone_number, function ($query) use ($params) {
+                $query->where('phone_number', 'like', "%{$params->phone_number}%");
+            })
+        ->get();
+
+        return $customers;
+    }
+
     public function countByWorkshop($idWorkshop){
         return $this->model
         ->count();

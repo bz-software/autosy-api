@@ -16,7 +16,9 @@ class VehicleRepository extends AbstractRepository
     }
 
     public function byCustomer($idCustomer){
-        return $this->model->where('id_customer', $idCustomer)->get();
+        return $this->model
+        ->fromCustomerOwner($idCustomer)
+        ->get();
     }
 
     public function searchByParams(VehicleDTO $params){

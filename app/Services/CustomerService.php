@@ -18,31 +18,21 @@ class CustomerService {
     public function store(CustomerDTO $customerDto, $idWorkshop){
         $customerDto->id_workshop = $idWorkshop;
 
-        return DB::transaction(function () use ($customerDto, $idWorkshop) {
-            $customer = $this->repository->create($customerDto->toArray());
+        $customer = $this->repository->create($customerDto->toArray());
 
-            if(!$customer){
-                throw new ServiceException([], 500, "Falha ao salvar cliente");
-            }
+        if(!$customer){
+            throw new ServiceException([], 500, "Falha ao salvar cliente");
+        }
 
-            $customerWorkshopDTO = new WorkshopCustomerDTO(
-                null,
-                $idWorkshop,
-                $customer->id
-            );
-
-            $workshopCustomer = $this->rWorkshopCustomer->create($customerWorkshopDTO->toArray());
-
-            if(!$workshopCustomer){
-                throw new ServiceException([], 500, "Falha ao salvar cliente");
-            }
-
-            return $customer;
-        });
+        return $customer;
     }
 
     public function search(CustomerDTO $params){
         return $this->repository->searchByParams($params);
+    }
+
+    public function searchByWorkshop(CustomerDTO $params, $idWorkshop){
+        return $this->repository->searchInWorkshopByParams($params, $idWorkshop);
     }
 
     public function update($id, $idWorkshop, CustomerDTO $customerDTO){

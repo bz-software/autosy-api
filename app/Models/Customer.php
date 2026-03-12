@@ -19,6 +19,12 @@ class Customer extends Model
         );
     }
     
+    public function scopeFromWorkshop($query, $workshopId)
+    {
+        return $query->join('workshop_customers', 'customers.id', '=', 'workshop_customers.id_customer')
+            ->where('workshop_customers.id_workshop', $workshopId);
+    }
+
     /**
      * =============
      * Relations

@@ -30,6 +30,13 @@ class Vehicle extends Model
         );
     }
 
+    public function scopeFromCustomerOwner($query, $idCustomer)
+    {
+        return $query->join('vehicle_owners', 'vehicles.id', '=', 'vehicle_owners.id_vehicle')
+            ->where('vehicle_owners.id_customer', $idCustomer)
+            ->whereNull('vehicle_owners.end_date');
+    }
+
     /**
      * =============
      * Relations

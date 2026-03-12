@@ -26,9 +26,16 @@ class CustomerController extends Controller
     public function search(SearchCustomerRequest $request){
         return CustomerResource::collection($this->service->search(
             CustomerDTO::fromRequest($request),
+        ));
+    }
+
+    public function searchByWorkshop(SearchCustomerRequest $request){
+        return CustomerResource::collection($this->service->searchByWorkshop(
+            CustomerDTO::fromRequest($request),
             $request->user()->workshop->id
         ));
     }
+    
 
     public function update(UpdateCustomerRequest $request) {
         return new CustomerResource(

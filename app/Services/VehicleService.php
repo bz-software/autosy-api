@@ -16,15 +16,11 @@ class VehicleService {
         private VehicleOwnerRepository $rVehicleOwner
     ) {}
 
-    public function getByCustomer($idCustomer, $idWorkshop){
-        $customer = $this->customerRepository->byId($idCustomer, $idWorkshop);
+    public function getByCustomer($idCustomer){
+        $customer = $this->customerRepository->byId($idCustomer);
 
         $notFoundMessage = "Cliente não encontrado";
         if(empty($customer)){
-            throw new ServiceException([], 404, $notFoundMessage);
-        }
-
-        if($customer->id_workshop != $idWorkshop){
             throw new ServiceException([], 404, $notFoundMessage);
         }
 

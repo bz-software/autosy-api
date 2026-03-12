@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\DTOs\AppointmentDTO;
 use App\DTOs\AppointmentWithServicesDTO;
+use App\DTOs\WorkshopCustomer\WorkshopCustomerDTO;
 use App\Enums\AppointmentStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\WorkshopType;
@@ -14,6 +15,7 @@ use App\Repositories\AppointmentServiceRepository;
 use App\Repositories\CustomerRepository;
 use App\Repositories\ServiceRepository;
 use App\Repositories\VehicleRepository;
+use App\Repositories\WorkshopCustomerRepository;
 use App\Repositories\WorkshopRepository;
 use App\Validation\ValidationErrorFormatter;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -30,6 +32,7 @@ class AppointmentService {
         private VehicleRepository $rVehicle,
         private CustomerRepository $rCustomer,
         private ServiceRepository $rService,
+        private WorkshopCustomerRepository $rWorkshopCustomer,
 
         private CashTransactionService $sCashTransaction
     ) {}
@@ -73,6 +76,14 @@ class AppointmentService {
         if(!$appointment->id){
             throw new ServiceException([], 500, "Falha ao agendar");
         }
+
+        $customerWorkshopDTO = new WorkshopCustomerDTO(
+            null,
+            $idWorkshop,
+            $dto->id_customer
+        );
+
+        $this->rWorkshopCustomer->create($customerWorkshopDTO->toArray());
 
         return $this->repository->withDetails($appointment->id);
     }
