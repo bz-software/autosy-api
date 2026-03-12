@@ -20,14 +20,12 @@ class StoreVehicleRequest extends AbstractFormRequest
                 'required',
                 'string',
                 'max:10',
-                Rule::unique('vehicles', 'license_plate')
+                Rule::unique('vehicles', 'license_plate'),
+                'alpha_num'
             ],
             'idCustomer' => [
                 'required',
                 Rule::exists('customers', 'id')
-                    ->where(fn ($query) =>
-                        $query->where('id_workshop', $this->user()->workshop->id)
-                    )
             ]
         ];
     }
@@ -39,6 +37,7 @@ class StoreVehicleRequest extends AbstractFormRequest
             'model.min' => 'O modelo deve ter pelo menos 5 caracteres.',
             'licensePlate.required' => 'A placa é obrigatório.',
             'licensePlate.unique' => 'Placa já está cadastrada.',
+            'licensePlate.alpha_num' => 'Formato de placa inválido, informe apenas números e letras',
             'idCustomer.exists' => "Cliente não encontrado."
         ];
     }

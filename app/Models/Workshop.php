@@ -45,10 +45,10 @@ class Workshop extends Model
         return $this->hasOne(User::class, 'id_workshop');
     }
     
-    public function customers()
-    {
-        return $this->hasMany(Customer::class, 'id_workshop');
-    }
+    // public function customers()
+    // {
+    //     return $this->hasMany(Customer::class, 'id_workshop');
+    // }
 
     public function services()
     {

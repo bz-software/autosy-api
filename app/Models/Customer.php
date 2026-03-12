@@ -10,13 +10,7 @@ class Customer extends Model
     protected $fillable = [
         'name',
         'phone_number',
-        'id_workshop'
     ];
-
-    public function scopeFromWorkshop($query, int $idWorkshop)
-    {
-        return $query->where('id_workshop', $idWorkshop);
-    }
 
     protected function name(): Attribute
     {
@@ -40,8 +34,8 @@ class Customer extends Model
         return $this->hasMany(Appointment::class, 'id_customer');
     }
 
-    public function workshop()
-    {
-        return $this->belongsTo(Workshop::class, 'id_workshop');
-    }
+    // public function workshop()
+    // {
+    //     return $this->belongsTo(Workshop::class, 'id_workshop');
+    // }
 }

@@ -2,23 +2,47 @@
 namespace App\Services;
 
 use App\DTOs\CustomerDTO;
+use App\DTOs\WorkshopCustomer\WorkshopCustomerDTO;
 use App\Exceptions\ServiceException;
 use App\Repositories\CustomerRepository;
+use App\Repositories\WorkshopCustomerRepository;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CustomerService {
     public function __construct(
         private CustomerRepository $repository,
+        private WorkshopCustomerRepository $rWorkshopCustomer
     ) {}
 
     public function store(CustomerDTO $customerDto, $idWorkshop){
         $customerDto->id_workshop = $idWorkshop;
-        
-        return $this->repository->create($customerDto->toArray());  
+
+        return DB::transaction(function () use ($customerDto, $idWorkshop) {
+            $customer = $this->repository->create($customerDto->toArray());
+
+            if(!$customer){
+                throw new ServiceException([], 500, "Falha ao salvar cliente");
+            }
+
+            $customerWorkshopDTO = new WorkshopCustomerDTO(
+                null,
+                $idWorkshop,
+                $customer->id
+            );
+
+            $workshopCustomer = $this->rWorkshopCustomer->create($customerWorkshopDTO->toArray());
+
+            if(!$workshopCustomer){
+                throw new ServiceException([], 500, "Falha ao salvar cliente");
+            }
+
+            return $customer;
+        });
     }
 
-    public function search(CustomerDTO $params, $idWorkshop){
-        return $this->repository->searchByParams($params, $idWorkshop);
+    public function search(CustomerDTO $params){
+        return $this->repository->searchByParams($params);
     }
 
     public function update($id, $idWorkshop, CustomerDTO $customerDTO){

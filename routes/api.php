@@ -30,6 +30,7 @@ Route::middleware(['auth:sanctum', 'subscription.active'])->group(function () {
     Route::prefix('vehicles')->group(function () {
         Route::post('/', [VehicleController::class, 'store']);
         Route::put('/{id}', [VehicleController::class, 'update']);
+        Route::get('/search', [VehicleController::class, 'search']);
     });
 
     Route::prefix('appointments')->group(function () {

@@ -56,11 +56,11 @@ class AppointmentService {
 
         $dto = AppointmentDTO::fromRequest($request);
         
-        if(empty($this->rCustomer->byId($dto->id_customer, $idWorkshop))){
+        if(empty($this->rCustomer->byId($dto->id_customer))){
             throw new ServiceException(['idCustomer' => "Cliente não encontrado"]);
         }
 
-        if(empty($this->rVehicle->byIdAndCustomer($dto->id_vehicle, $dto->id_customer))){
+        if(empty($this->rVehicle->findById($dto->id_vehicle))){
             throw new ServiceException(['idVehicle' => "Veículo não encontrado"]);
         }
 

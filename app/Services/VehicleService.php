@@ -1,17 +1,19 @@
 <?php   
 namespace App\Services;
 
-use App\DTOs\CustomerDTO;
 use App\DTOs\VehicleDTO;
+use App\DTOs\VehicleOwner\VehicleOwnerDTO;
 use App\Exceptions\ServiceException;
 use App\Repositories\CustomerRepository;
+use App\Repositories\VehicleOwnerRepository;
 use App\Repositories\VehicleRepository as Repository;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class VehicleService {
     public function __construct(
         private CustomerRepository $customerRepository,
-        private Repository $repository
+        private Repository $repository,
+        private VehicleOwnerRepository $rVehicleOwner
     ) {}
 
     public function getByCustomer($idCustomer, $idWorkshop){
@@ -29,14 +31,42 @@ class VehicleService {
         return $this->repository->byCustomer($idCustomer);
     }
 
-    public function store(VehicleDTO $vehicleDTO, $idWorkshop){
-        $customer = $this->customerRepository->byId($vehicleDTO->id_customer, $idWorkshop);
+    public function search(VehicleDTO $params){
+        return $this->repository->searchByParams($params);
+    }
+
+    public function store(VehicleDTO $vehicleDTO){
+        $customer = $this->customerRepository->byId($vehicleDTO->id_customer);
 
         if(empty($customer)){
             throw new ServiceException([], 404, "Cliente não encontrado");
         }
+
+        return DB::transaction(function () use ($vehicleDTO, $customer) {
+            $vehicle = $this->repository->store($vehicleDTO->toArray());  
+
+            if(!$vehicle){
+                throw new ServiceException([], 500, "Falha ao salvar veículo");
+            }
+    
+            $vehicleOwnerDto = new VehicleOwnerDTO(
+                null,
+                $customer->id,
+                $vehicle->id,
+                date('Y-m-d'),
+                null,
+                null
+            );
+    
+            $vehicleOwner = $this->rVehicleOwner->create($vehicleOwnerDto->toArray());
+
+            if(!$vehicleOwner){
+                throw new ServiceException([], 500, "Falha ao salvar veículo");
+            }
+
+            return $vehicle;
+        });
         
-        return $this->repository->store($vehicleDTO->toArray());  
     }
 
     public function update($id, VehicleDTO $vehicleDTO){

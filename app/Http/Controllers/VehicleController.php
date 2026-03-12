@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\VehicleDTO;
+use App\Http\Requests\Customer\SearchCustomerRequest;
 use App\Http\Requests\Vehicle\StoreVehicleRequest;
 use App\Http\Requests\Vehicle\UpdateVehicleRequest;
 use App\Http\Resources\Vehicle\VehicleResource;
@@ -27,6 +28,12 @@ class VehicleController extends Controller
             VehicleDTO::fromRequest($request), 
             $request->user()->workshop->id)
         );
+    }
+
+    public function search(SearchCustomerRequest $request){
+        return VehicleResource::collection($this->service->search(
+            VehicleDTO::fromRequest($request),
+        ));
     }
 
     public function update(UpdateVehicleRequest $request){

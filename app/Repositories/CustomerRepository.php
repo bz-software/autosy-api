@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\DTOs\CustomerDTO;
 use App\Models\Customer;
+use Illuminate\Support\Facades\DB;
 
 class CustomerRepository
 {
@@ -12,24 +13,27 @@ class CustomerRepository
         return $this->model->create($user);
     }
 
-    public function byId($id, $idWorkshop){
+    public function byId($id){
         return $this->model
-            ->fromWorkshop($idWorkshop)
             ->where('id', $id)
             ->first();
     }
 
-    public function toUpdate($id, $phoneNumber, $idWorkshop){
+    public function findByPhoneNumber($phoneNumber){
         return $this->model
-            ->fromWorkshop($idWorkshop)
+            ->where('phone_number', $phoneNumber)
+            ->first();
+    }
+
+    public function toUpdate($id, $phoneNumber){
+        return $this->model
             ->where('phone_number', $phoneNumber)
             ->where('id', '!=', $id)
             ->first();
     }
 
-    public function searchByParams(CustomerDTO $params, $idWorkshop){
+    public function searchByParams(CustomerDTO $params){
         $customers = $this->model::query()
-            ->fromWorkshop($idWorkshop)
             ->when($params->phone_number, function ($query) use ($params) {
                 $query->where('phone_number', 'like', "%{$params->phone_number}%");
             })
@@ -40,7 +44,6 @@ class CustomerRepository
 
     public function countByWorkshop($idWorkshop){
         return $this->model
-            ->fromWorkshop($idWorkshop)
         ->count();
     }
 

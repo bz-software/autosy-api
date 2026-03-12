@@ -1,10 +1,15 @@
 <?php
 namespace App\Repositories;
+
+use App\DTOs\VehicleDTO;
 use App\Models\Vehicle;
 
-class VehicleRepository
+class VehicleRepository extends AbstractRepository
 {
-    public function __construct(private Vehicle $model) {}
+    public function __construct(Vehicle $model)
+    {
+        parent::__construct($model);
+    }
 
     public function store($vehicle){
         return $this->model->create($vehicle);
@@ -14,21 +19,22 @@ class VehicleRepository
         return $this->model->where('id_customer', $idCustomer)->get();
     }
 
+    public function searchByParams(VehicleDTO $params){
+        $customers = $this->model::query()
+            ->when($params->license_plate, function ($query) use ($params) {
+                $query->where('license_plate', 'like', "%{$params->license_plate}%");
+            })
+        ->get();
+
+        return $customers;
+    }
+
+
     public function byIdAndCustomer($id, $idCustomer){
         return $this->model
             ->where('id_customer', $idCustomer)
             ->where('id', $id)
         ->first();
-    }
-
-    public function update($id, $vehicle){
-        $data = $this->model
-            ->where('id', $id)
-            ->firstOrFail();
-
-        $data->update($vehicle);
-
-        return $data;
     }
 }
 

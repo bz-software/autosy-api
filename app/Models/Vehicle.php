@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Vehicle extends Model
 {
     protected $fillable = [
-        'id_customer',
         'license_plate',
         'model'
     ];
@@ -36,10 +35,10 @@ class Vehicle extends Model
      * Relations
      * =============
      */
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class, 'id_customer');
-    }
+    // public function customer()
+    // {
+    //     return $this->belongsTo(Customer::class, 'id_customer');
+    // }
 
     public function appointments()
     {
