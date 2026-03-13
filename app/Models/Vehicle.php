@@ -11,17 +11,6 @@ class Vehicle extends Model
         'model'
     ];
 
-    protected $appends = [
-        'id_owner'
-    ];
-
-    public function getidOwnerAttribute()
-    {
-        $owner = $this->owner()->first();
-
-        return $owner->id_customer ?? null;
-    }
-
     protected function licensePlate(): Attribute
     {
         return Attribute::make(
