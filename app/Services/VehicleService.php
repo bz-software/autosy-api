@@ -2,10 +2,8 @@
 namespace App\Services;
 
 use App\DTOs\VehicleDTO;
-use App\DTOs\VehicleOwner\VehicleOwnerDTO;
 use App\Exceptions\ServiceException;
 use App\Repositories\CustomerRepository;
-use App\Repositories\VehicleOwnerRepository;
 use App\Repositories\VehicleRepository as Repository;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +11,6 @@ class VehicleService {
     public function __construct(
         private CustomerRepository $customerRepository,
         private Repository $repository,
-        private VehicleOwnerRepository $rVehicleOwner
     ) {}
 
     public function getByCustomer($idCustomer){
@@ -42,21 +39,6 @@ class VehicleService {
             $vehicle = $this->repository->store($vehicleDTO->toArray());  
 
             if(!$vehicle){
-                throw new ServiceException([], 500, "Falha ao salvar veículo");
-            }
-    
-            $vehicleOwnerDto = new VehicleOwnerDTO(
-                null,
-                $customer->id,
-                $vehicle->id,
-                date('Y-m-d'),
-                null,
-                null
-            );
-    
-            $vehicleOwner = $this->rVehicleOwner->create($vehicleOwnerDto->toArray());
-
-            if(!$vehicleOwner){
                 throw new ServiceException([], 500, "Falha ao salvar veículo");
             }
 
