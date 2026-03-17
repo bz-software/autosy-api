@@ -2,8 +2,8 @@
 namespace App\Http\Requests\Appointment;
 
 use App\Http\Requests\AbstractFormRequest;
-use App\Enums\WorkshopType;
-use Illuminate\Validation\Rule;
+// use Illuminate\Validation\Rules\Enum;
+// use App\Enums\AppointmentServiceType;
 
 class StoreAppointmentWithServicesRequest extends AbstractFormRequest
 {
@@ -44,6 +44,11 @@ class StoreAppointmentWithServicesRequest extends AbstractFormRequest
                 'numeric',
                 'min:0'
             ],
+            // 'services.*.type' => [
+            //     'required',
+            //     'integer',
+            //     new Enum(AppointmentServiceType::class),
+            // ]
         ];
     }
 
@@ -66,6 +71,10 @@ class StoreAppointmentWithServicesRequest extends AbstractFormRequest
 
             'services.*.unitPrice.required' => 'Valor do serviço é obrigatório',
             'services.*.unitPrice.min' => 'Valor do serviço não pode ser negativo',
+
+            // 'services.*.type.required' => "O tipo é obrigatório",
+            // 'services.*.type.integer' => "Tipo inválido",
+            // 'services.*.type.enum' => "Tipo inválido",
 
             'date.required' => 'Data do agendamento é obrigatória',
         ];

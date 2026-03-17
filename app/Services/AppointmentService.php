@@ -4,6 +4,7 @@ namespace App\Services;
 use App\DTOs\AppointmentDTO;
 use App\DTOs\AppointmentWithServicesDTO;
 use App\DTOs\WorkshopCustomer\WorkshopCustomerDTO;
+use App\Enums\AppointmentServiceType;
 use App\Enums\AppointmentStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\WorkshopType;
@@ -120,6 +121,7 @@ class AppointmentService {
 
             foreach($dto->services as $appointmentService){
                 $appointmentService->id_appointment = $appointment->id;
+                $appointmentService->type = AppointmentServiceType::SERVICO->value;
                 
                 if(!$this->rAppointmentService->store($appointmentService->toArray())){
                     throw new ServiceException([], 500, "Falha ao agendar (item)");

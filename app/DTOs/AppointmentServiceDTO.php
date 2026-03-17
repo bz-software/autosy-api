@@ -11,7 +11,8 @@ class AppointmentServiceDTO extends AbstractDTO
         public ?string $service_name,
         public ?float $unit_price,
         public ?int $quantity,
-        public ?int $id_service
+        public ?int $id_service,
+        public ?int $type
     ) {}
 
     /**
@@ -24,7 +25,8 @@ class AppointmentServiceDTO extends AbstractDTO
             $request->input('serviceName') ?? null,
             $request->input('unitPrice') ?? null,
             $request->input('quantity') ?? null,
-            $request->input('idService') ?? null
+            $request->input('idService') ?? null,
+            $request->input('type') ?? null
         );
     }
 
@@ -35,7 +37,8 @@ class AppointmentServiceDTO extends AbstractDTO
             $array['serviceName'] ?? null,
             $array['unitPrice'] ?? 0,
             $array['quantity'] ?? 0,
-            $array['idService'] ?? 0
+            $array['idService'] ?? 0,
+            $array['type'] ?? 0
         );
     }
 }
