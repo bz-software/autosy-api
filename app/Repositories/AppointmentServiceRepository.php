@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Enums\AppointmentServiceType;
 use App\Enums\AppointmentStatus;
 use App\Models\AppointmentService;
 
@@ -40,6 +41,7 @@ class AppointmentServiceRepository
             ->whereBetween('a.appointment_date', [$startDate, $endDate])
             ->where('a.status', AppointmentStatus::FINALIZADO->value)
             ->where('a.id_workshop', $idWorkshop)
+            ->where('appointment_services.type', AppointmentServiceType::SERVICO->value)
             ->selectRaw('SUM(appointment_services.unit_price * appointment_services.quantity) as total')
             ->value('total') ?? 0;
     }

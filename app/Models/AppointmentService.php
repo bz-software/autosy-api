@@ -15,7 +15,8 @@ class AppointmentService extends Model
         'service_name',
         'unit_price',
         'quantity',
-        'id_service'
+        'id_service',
+        'type'
     ];
 
     protected $casts = [
