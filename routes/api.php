@@ -29,6 +29,7 @@ Route::middleware(['auth:sanctum', 'subscription.active'])->group(function () {
 
     Route::prefix('workshops')->group(function () {
         Route::get('/customers', [CustomerController::class, 'searchByWorkshop']);
+        Route::get('/customers/{id}/appointments', [AppointmentController::class, 'byWorkshopCustomer']);
     });
 
     Route::prefix('vehicles')->group(function () {

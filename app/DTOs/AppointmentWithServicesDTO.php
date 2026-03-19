@@ -14,7 +14,8 @@ class AppointmentWithServicesDTO extends AbstractDTO
         public int $status,
         public string $notes,
         public string $appointment_date,
-        public array $services
+        public int|null $odometer,
+        public array $services,
     ) {}
 
     
@@ -31,6 +32,7 @@ class AppointmentWithServicesDTO extends AbstractDTO
             $request->input('status') ?? 0,
             $request->input('notes') ?? "",
             $request->input('date') ?? null,
+            $request->input('odometer') ?? null,
             array_map(
                 fn (array $service) => AppointmentServiceDTO::fromArray($service),
                 $request->input('services', [])

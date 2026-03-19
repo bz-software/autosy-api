@@ -13,7 +13,7 @@ class VehicleService {
         private Repository $repository,
     ) {}
 
-    public function getByCustomer($idCustomer){
+    public function getByCustomer($idCustomer, $idWorkshop){
         $customer = $this->customerRepository->byId($idCustomer);
 
         $notFoundMessage = "Cliente não encontrado";
@@ -21,7 +21,7 @@ class VehicleService {
             throw new ServiceException([], 404, $notFoundMessage);
         }
 
-        return $this->repository->byCustomer($idCustomer);
+        return $this->repository->byCustomer($idCustomer, $idWorkshop);
     }
 
     public function search(VehicleDTO $params){

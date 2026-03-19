@@ -45,6 +45,7 @@ class CustomerRepository
     public function searchInWorkshopByParams(CustomerDTO $params, $idWorkshop){
         $customers = $this->model::query()
             ->fromWorkshop($idWorkshop)
+            ->select('customers.*')
             ->when($params->phone_number, function ($query) use ($params) {
                 $query->where('phone_number', 'like', "%{$params->phone_number}%");
             })

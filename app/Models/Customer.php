@@ -19,10 +19,10 @@ class Customer extends Model
         );
     }
     
-    public function scopeFromWorkshop($query, $workshopId)
+    public function scopeFromWorkshop($query, $idWorkshop)
     {
         return $query->join('workshop_customers', 'customers.id', '=', 'workshop_customers.id_customer')
-            ->where('workshop_customers.id_workshop', $workshopId);
+            ->where('workshop_customers.id_workshop', $idWorkshop);
     }
 
     /**
@@ -40,8 +40,7 @@ class Customer extends Model
         return $this->hasMany(Appointment::class, 'id_customer');
     }
 
-    // public function workshop()
-    // {
-    //     return $this->belongsTo(Workshop::class, 'id_workshop');
-    // }
+    public function workshops(){
+        return $this->belongsToMany(Workshop::class, 'workshop_customers', 'id_customer', 'id_workshop');
+    }
 }

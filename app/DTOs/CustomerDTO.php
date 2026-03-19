@@ -6,22 +6,22 @@ use Illuminate\Http\Request;
 
 class CustomerDTO extends AbstractDTO
 {
+    public $id;
     public $name;
     public $phone_number;
-    public $id_workshop;
 
     /**
      * CustomerDTO constructor.
      * 
+     * @param int|null $id
      * @param string $name
      * @param string $phoneNumber
-     * @param int $idWorkshop
      */
-    public function __construct($name, $phoneNumber, $idWorkshop)
+    public function __construct($id, $name, $phoneNumber)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->phone_number = $phoneNumber;
-        $this->id_workshop = $idWorkshop;
     }
 
     /**
@@ -33,9 +33,9 @@ class CustomerDTO extends AbstractDTO
     public static function fromRequest(Request $request): self
     {
         return new self(
+            $request->input('id') ?? null,
             $request->input('name') ?? null,
-            $request->input('phoneNumber') ?? null,
-            $request->input('idWorkshop') ?? null
+            $request->input('phoneNumber') ?? null
         );
     }
 }

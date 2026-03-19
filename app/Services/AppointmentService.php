@@ -328,13 +328,22 @@ class AppointmentService {
         });
     }
 
-    public function byCustomer($idCustomer, $idWorkshop){
-        $customer = $this->rCustomer->byId($idCustomer, $idWorkshop);
+    public function byCustomer($idCustomer){
+        $customer = $this->rCustomer->byId($idCustomer);
         if(empty($customer)){
             throw new ServiceException([], 404, "Cliente não encontrado");
         }
 
         return $this->repository->byCustomer($idCustomer);
+    }
+
+    public function byWorkshopCustomer($idCustomer, $idWorkshop){
+        $customer = $this->rCustomer->byId($idCustomer);
+        if(empty($customer)){
+            throw new ServiceException([], 404, "Cliente não encontrado");
+        }
+
+        return $this->repository->byWorkshopCustomer($idCustomer, $idWorkshop);
     }
 
     public function createWorkshopCustomer($idCustomer, $idWorkshop){

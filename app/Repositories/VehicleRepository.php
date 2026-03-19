@@ -15,10 +15,15 @@ class VehicleRepository extends AbstractRepository
         return $this->model->create($vehicle);
     }
 
-    public function byCustomer($idCustomer){
-        return $this->model
-        ->fromCustomerOwner($idCustomer)
-        ->get();
+    public function byCustomer($idCustomer, $idWorkshop){
+        return $this->model::query()
+            ->select('vehicles.*')
+            ->distinct()
+            ->join('appointments as a', 'a.id_vehicle', '=', 'vehicles.id')
+            ->join('workshop_customers as wc', 'wc.id_customer', '=', 'a.id_customer')
+            ->where('a.id_workshop', $idWorkshop)
+            ->where('a.id_customer', $idCustomer)
+            ->get();
     }
 
     public function searchByParams(VehicleDTO $params){

@@ -15,20 +15,28 @@ class UpdateVehicleRequest extends AbstractFormRequest
     public function rules(): array
     {
         return [
-            'model' => ['required', 'string', 'min:5', 'max:150'],
+            'brand' => ['required', 'string', 'min:2', 'max:100'],
+
+            'model' => ['required', 'string', 'min:2', 'max:150'],
+
+            'year' => [
+                'nullable',
+                'integer',
+                'min:1900',
+                'max:' . date('Y')
+            ],
+
+            'engine' => ['nullable', 'string', 'max:50'],
+
+            'color' => ['nullable', 'string', 'max:50'],
+
             'licensePlate' => [
                 'required',
                 'string',
                 'max:10',
+                'alpha_num',
                 Rule::unique('vehicles', 'license_plate')
                     ->ignore($this->route('id')),
-            ],
-            'idCustomer' => [
-                'required',
-                Rule::exists('customers', 'id')
-                    ->where(fn ($query) =>
-                        $query->where('id_workshop', $this->user()->workshop->id)
-                    )
             ]
         ];
     }
@@ -36,11 +44,24 @@ class UpdateVehicleRequest extends AbstractFormRequest
     public function messages(): array
     {
         return [
+            'brand.required' => 'A marca é obrigatória.',
+
             'model.required' => 'O modelo é obrigatório.',
-            'model.min' => 'O modelo deve ter pelo menos 5 caracteres.',
-            'licensePlate.required' => 'A placa é obrigatório.',
-            'licensePlate.unique' => 'Placa já está cadastrada .',
-            'idCustomer.exists' => "Cliente não encontrado."
+            'model.min' => 'O modelo deve ter pelo menos 2 caracteres.',
+
+            'year.integer' => 'O ano deve ser numérico.',
+            'year.min' => 'Ano inválido.',
+            'year.max' => 'O ano não pode ser no futuro.',
+
+            'engine.max' => 'O motor deve ter no máximo 50 caracteres.',
+
+            'color.max' => 'A cor deve ter no máximo 50 caracteres.',
+
+            'licensePlate.required' => 'A placa é obrigatória.',
+            'licensePlate.unique' => 'Placa já está cadastrada.',
+            'licensePlate.alpha_num' => 'Formato de placa inválido, informe apenas números e letras',
+
+            'idCustomer.exists' => 'Cliente não encontrado.'
         ];
     }
 }

@@ -41,7 +41,6 @@ class CustomerController extends Controller
         return new CustomerResource(
             $this->service->update(
                 $request->route('id'),
-                $request->user()->workshop->id,
                 CustomerDTO::fromRequest($request)
             )
         );

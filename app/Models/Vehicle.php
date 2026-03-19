@@ -4,12 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+
 class Vehicle extends Model
 {
     protected $fillable = [
         'license_plate',
-        'model'
+        'brand',
+        'model',
+        'year',
+        'engine',
+        'color',
     ];
+
+    /**
+     * ======================
+     * Mutators
+     * ======================
+     */
 
     protected function licensePlate(): Attribute
     {
@@ -22,12 +33,39 @@ class Vehicle extends Model
         );
     }
 
+    protected function brand(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => mb_strtoupper($value, 'UTF-8')
+        );
+    }
+
     protected function model(): Attribute
     {
         return Attribute::make(
             set: fn ($value) => mb_strtoupper($value, 'UTF-8')
         );
     }
+
+    protected function engine(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => mb_strtoupper($value, 'UTF-8')
+        );
+    }
+
+    protected function color(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => mb_strtoupper($value, 'UTF-8')
+        );
+    }
+
+    /**
+     * ======================
+     * Scopes
+     * ======================
+     */
 
     public function scopeFromCustomerOwner($query, $idCustomer)
     {
@@ -37,14 +75,10 @@ class Vehicle extends Model
     }
 
     /**
-     * =============
+     * ======================
      * Relations
-     * =============
+     * ======================
      */
-    // public function customer()
-    // {
-    //     return $this->belongsTo(Customer::class, 'id_customer');
-    // }
 
     public function appointments()
     {
