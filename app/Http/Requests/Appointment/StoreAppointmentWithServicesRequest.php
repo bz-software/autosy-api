@@ -2,6 +2,8 @@
 namespace App\Http\Requests\Appointment;
 
 use App\Http\Requests\AbstractFormRequest;
+use App\Models\Appointment;
+
 // use Illuminate\Validation\Rules\Enum;
 // use App\Enums\AppointmentServiceType;
 
@@ -49,6 +51,23 @@ class StoreAppointmentWithServicesRequest extends AbstractFormRequest
             //     'integer',
             //     new Enum(AppointmentServiceType::class),
             // ]
+            'odometer' => [
+                'required',
+                'integer',
+                'min:1',
+                function ($attribute, $value, $fail) {
+                    $idVehicle = request()->input('idVehicle');
+
+                    $lastOdometer = Appointment::where('id_vehicle', $idVehicle)
+                        ->max('odometer');
+
+                    $i = $this->all();
+
+                    if ($lastOdometer && $value < $lastOdometer) {
+                        $fail("A quilometragem não pode ser menor que a última registrada ({$lastOdometer} km).");
+                    }
+                }
+            ],
         ];
     }
 

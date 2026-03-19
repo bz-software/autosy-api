@@ -15,7 +15,8 @@ class Appointment extends Model
         'status',
         'notes',
         'deleted',
-        'appointment_date'
+        'appointment_date',
+        'odometer'
     ];
 
     protected $casts = [
@@ -25,7 +26,7 @@ class Appointment extends Model
 
     public function scopeFromWorkshop($query, int $idWorkshop)
     {
-        return $query->where('id_workshop', $idWorkshop);
+        return $query->where($this->table . '.id_workshop', $idWorkshop);
     }
 
     public function services()

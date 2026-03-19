@@ -13,7 +13,8 @@ class AppointmentDTO extends AbstractDTO
         public string $license_plate,
         public int $status,
         public string $notes,
-        public string $appointment_date
+        public string $appointment_date,
+        public int|null $odometer
     ) {}
 
     
@@ -29,7 +30,8 @@ class AppointmentDTO extends AbstractDTO
             $request->input('licensePlate') ?? null,
             $request->input('status') ?? 0,
             $request->input('notes') ?? null,
-            $request->input('date') ?? null
+            $request->input('date') ?? null,
+            $request->input('odometer') ?? null
         );
     }
 }

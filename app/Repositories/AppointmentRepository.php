@@ -108,8 +108,18 @@ class AppointmentRepository
         return $this->model::with([
             'services'
         ])
-        ->where('deleted', false)
-        ->where('id_customer', $idCustomer)
+        ->where('appointments.deleted', false)
+        ->where('appointments.id_customer', $idCustomer)
+        ->get();
+    }
+
+    public function byWorkshopCustomer($idCustomer, $idWorkshop){
+        return $this->model::with([
+            'services'
+        ])
+        ->fromWorkshop($idWorkshop)
+        ->where('appointments.deleted', false)
+        ->where('appointments.id_customer', $idCustomer)
         ->get();
     }
 }

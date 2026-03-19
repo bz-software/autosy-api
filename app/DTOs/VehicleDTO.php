@@ -9,29 +9,46 @@ class VehicleDTO extends AbstractDTO
     public $id;
     public $id_customer;
     public $license_plate;
+    public $brand;
     public $model;
+    public $year;
+    public $engine;
+    public $color;
 
     /**
-     * CustomerDTO constructor.
+     * VehicleDTO constructor.
      * 
-     * @param int $id
-     * @param int $idCustomer
-     * @param int $licensePlate
-     * @param string $model
+     * @param int|null $id
+     * @param int|null $idCustomer
+     * @param string|null $licensePlate
+     * @param string|null $brand
+     * @param string|null $model
+     * @param int|null $year
+     * @param string|null $engine
+     * @param string|null $color
      */
-    public function __construct($id, $idCustomer, $licensePlate, $model)
-    {
+    public function __construct(
+        $id,
+        $idCustomer,
+        $licensePlate,
+        $brand,
+        $model,
+        $year,
+        $engine,
+        $color
+    ) {
         $this->id = $id;
         $this->id_customer = $idCustomer;
         $this->license_plate = $licensePlate;
+        $this->brand = $brand;
         $this->model = $model;
+        $this->year = $year;
+        $this->engine = $engine;
+        $this->color = $color;
     }
 
     /**
-     * Método para criar o DTO a partir de uma requisição.
-     * 
-     * @param Request $request
-     * @return VehicleDTO
+     * Criar DTO a partir da request
      */
     public static function fromRequest(Request $request): self
     {
@@ -39,7 +56,11 @@ class VehicleDTO extends AbstractDTO
             $request->input('id') ?? null,
             $request->input('idCustomer') ?? null,
             $request->input('licensePlate') ?? null,
-            $request->input('model') ?? null
+            $request->input('brand') ?? null,
+            $request->input('model') ?? null,
+            $request->input('year') ?? null,
+            $request->input('engine') ?? null,
+            $request->input('color') ?? null
         );
     }
 }
