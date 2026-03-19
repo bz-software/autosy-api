@@ -15,8 +15,6 @@ class CustomerService {
     ) {}
 
     public function store(CustomerDTO $customerDto, $idWorkshop){
-        $customerDto->id_workshop = $idWorkshop;
-
         $customer = $this->repository->create($customerDto->toArray());
 
         if(!$customer){
@@ -34,14 +32,14 @@ class CustomerService {
         return $this->repository->searchInWorkshopByParams($params, $idWorkshop);
     }
 
-    public function update($id, $idWorkshop, CustomerDTO $customerDTO){
-        $customer = $this->repository->byId($id, $idWorkshop);
+    public function update($id, CustomerDTO $customerDTO){
+        $customerDTO->id = $id;
+        $customer = $this->repository->byId($id);
 
         if(empty($customer)){
             throw new ServiceException([], 404, "Cliente não encontrado");
         }
 
-        $customerDTO->id_workshop = $idWorkshop;
         return $this->repository->update($id, $customerDTO->toArray());
     }
 }

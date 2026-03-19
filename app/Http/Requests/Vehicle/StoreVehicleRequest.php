@@ -36,11 +36,6 @@ class StoreVehicleRequest extends AbstractFormRequest
                 'max:10',
                 'alpha_num',
                 Rule::unique('vehicles', 'license_plate')
-            ],
-
-            'idCustomer' => [
-                'required',
-                Rule::exists('customers', 'id')
             ]
         ];
     }

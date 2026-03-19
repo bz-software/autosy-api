@@ -37,11 +37,6 @@ class UpdateVehicleRequest extends AbstractFormRequest
                 'alpha_num',
                 Rule::unique('vehicles', 'license_plate')
                     ->ignore($this->route('id')),
-            ],
-
-            'idCustomer' => [
-                'required',
-                Rule::exists('customers', 'id')
             ]
         ];
     }
