@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTOs\CashTransaction\SearchCashTransactionDTO;
 use App\DTOs\CashTransaction\CashTransactionDTO;
+use App\Enums\AppointmentServiceType;
 use App\Enums\CashTransactionCategory;
 use App\Enums\CashTransactionSourceType;
 use App\Enums\CashTransactionType;
@@ -116,6 +117,10 @@ class CashTransactionService
 
         $amount = 0;
         foreach($appointmentServices as $appointmentService){
+            if($appointmentService->type == AppointmentServiceType::PECA->value){
+                continue;
+            }
+
             $unit = $appointmentService->unit_price * $appointmentService->quantity;
 
             $amount += $unit;
