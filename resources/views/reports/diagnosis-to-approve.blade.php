@@ -6,117 +6,210 @@
 
 <style>
 
-    @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
-    body {
-        font-family: "Nunito Sans", sans-serif;
-        font-size: 14px;
-        color: #111;
-        margin: 15px;
+    @font-face {
+        font-family: 'Nunito';
+        font-weight: 400;
+        font-style: normal;
+        src: url('{{ str_replace('\\', '/', resource_path('fonts/nunito/Nunito-Regular.ttf')) }}') format('truetype');
     }
 
-    .header {
-        margin-bottom: 30px;
+    @font-face {
+        font-family: 'Nunito';
+        font-weight: 600;
+        font-style: normal;
+        src: url('{{ str_replace('\\', '/', resource_path('fonts/nunito/Nunito-SemiBold.ttf')) }}') format('truetype');
+    }
+
+    @font-face {
+        font-family: 'Nunito';
+        font-weight: 700;
+        font-style: normal;
+        src: url('{{ str_replace('\\', '/', resource_path('fonts/nunito/Nunito-Bold.ttf')) }}') format('truetype');
+    }
+
+    @font-face {
+        font-family: 'Nunito';
+        font-weight: 800;
+        font-style: normal;
+        src: url('{{ str_replace('\\', '/', resource_path('fonts/nunito/Nunito-ExtraBold.ttf')) }}') format('truetype');
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: "Nunito", sans-serif;
+        font-size: 13px;
+        color: #111111;
+        margin: 0;
+        padding: 20px 26px;
+        line-height: 1.45;
+    }
+
+    /* Document sections */
+
+    .doc-section {
+        padding: 14px 0;
+    }
+
+    .doc-section + .doc-section {
+        border-top: 1px solid #d8d8d8;
+    }
+
+    .doc-header {
+        padding-bottom: 14px;
+        border-bottom: 2px solid #0a0a0a;
+    }
+
+    /* Header */
+
+    table.header-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table.header-table td {
+        vertical-align: middle;
+        padding: 0;
+    }
+
+    table.header-table td.header-right {
+        text-align: right;
     }
 
     .workshop-name {
-        font-size: 24px;
-        font-weight: 700;
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: -0.2px;
     }
 
     .workshop-phone {
-        color: #666;
+        color: #6b6b6b;
+        font-size: 12px;
         margin-top: 3px;
     }
 
-    .card {
-        border: 1px solid #e8e8e8;
-        border-radius: 10px;
-        padding: 18px;
-        margin-bottom: 20px;
-    }
-
-    .card-title {
+    .doc-kicker {
+        font-size: 10px;
         font-weight: 700;
-        font-size: 16px;
-        margin-bottom: 15px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #9a9a9a;
     }
 
-    .row {
+    .doc-title {
+        font-size: 15px;
+        font-weight: 800;
+        margin-top: 2px;
+    }
+
+    /* Section title */
+
+    .section-title {
+        font-weight: 800;
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #6b6b6b;
+        margin-bottom: 10px;
+    }
+
+    /* Classic grid tables */
+
+    table.grid {
         width: 100%;
+        border-collapse: collapse;
     }
 
-    .col {
-        width: 49%;
-        display: inline-block;
+    table.grid th,
+    table.grid td {
+        border: 1px solid #d8d8d8;
+        padding: 8px 10px;
+        text-align: left;
         vertical-align: top;
     }
 
-    .label {
-        font-size: 12px;
-        color: #777;
+    table.grid th {
+        width: 15%;
+        background: #f5f5f5;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #6b6b6b;
     }
 
-    .value {
+    table.grid td {
+        width: 35%;
+        font-size: 13px;
         font-weight: 600;
-        margin-top: 3px;
+        color: #0a0a0a;
     }
 
-    .observation {
-        margin-top: 15px;
-        background: #f7f7f7;
-        padding: 12px;
-        border-radius: 8px;
-    }
+    /* Services table */
 
-    table {
+    table.services {
         width: 100%;
         border-collapse: collapse;
         page-break-inside: auto;
     }
 
-    thead {
+    table.services thead {
         display: table-header-group;
     }
 
-    tr {
+    table.services tr {
         page-break-inside: avoid;
     }
 
-    th {
+    table.services th {
+        background: #0a0a0a;
+        color: #ffffff;
         text-align: left;
-        font-size: 12px;
-        color: #666;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 8px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        padding: 8px 10px;
+        border: 1px solid #0a0a0a;
     }
 
-    td {
-        padding: 10px 0;
-        border-bottom: 1px solid #eee;
+    table.services td {
+        padding: 8px 10px;
+        border: 1px solid #d8d8d8;
+        font-size: 13px;
+    }
+
+    table.services tfoot td {
+        border: 1px solid #d8d8d8;
+        border-top: 2px solid #0a0a0a;
+        background: #f5f5f5;
+        padding: 10px;
+    }
+
+    table.services tfoot .total-label-cell {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: #444444;
+    }
+
+    table.services tfoot .total-value-cell {
+        font-size: 17px;
+        font-weight: 800;
+        color: #0a0a0a;
     }
 
     .text-right {
         text-align: right;
     }
 
-    .total-card {
-        text-align: right;
-        page-break-inside: avoid;
-    }
-
-    .total-label {
-        font-size: 14px;
-        color: #555;
-    }
-
-    .total-value {
-        font-size: 24px;
-        font-weight: 700;
-        margin-top: 4px;
-    }
+    /* Signatures */
 
     .signatures {
-        margin-top: 80px;
+        width: 100%;
     }
 
     .signature {
@@ -126,22 +219,27 @@
     }
 
     .signature-line {
-        margin-top: 70px;
-        border-top: 1px solid #000;
-        padding-top: 8px;
+        margin-top: 44px;
+        border-top: 1px solid #0a0a0a;
+        padding-top: 6px;
+        font-size: 11px;
+        color: #6b6b6b;
     }
 
+    /* Footer */
+
     .autosy-footer {
-        margin-top: 40px;
+        margin-top: 18px;
         text-align: center;
-        font-size: 12px;
-        color: #777;
+        font-size: 11px;
+        color: #9a9a9a;
     }
 
     .autosy-brand {
-        font-weight: 700;
-        font-size: 14px;
-        margin-bottom: 5px;
+        font-weight: 800;
+        font-size: 12px;
+        color: #0a0a0a;
+        margin-bottom: 3px;
     }
 
 </style>
@@ -150,174 +248,138 @@
 
 <body>
 
-<div class="header">
-
-    <div class="workshop-name">
-        {{ $workshop['name'] }}
-    </div>
-
-    <div class="workshop-phone">
-        Telefone: {{ $workshop['phone_number'] }}
-    </div>
-
-</div>
-
-
-<div class="card">
-
-    <div class="card-title">
-        Dados do cliente
-    </div>
-
-    <div class="row">
-
-        <div class="col">
-            <div class="label">Cliente</div>
-            <div class="value">
-                {{ $customer['name'] }}
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="label">Telefone</div>
-            <div class="value">
-                {{ $customer['phone_number'] }}
-            </div>
-        </div>
-
-    </div>
-
-</div>
-
-
-<div class="card">
-
-    <div class="card-title">
-        Dados do veículo
-    </div>
-
-    <div class="row">
-
-        <div class="col">
-            <div class="label">Placa</div>
-            <div class="value">
-                {{ $license_plate }}
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="label">Modelo</div>
-            <div class="value">
-                {{ $vehicle['model'] }}
-            </div>
-        </div>
-
-    </div>
-
-    <div class="observation">
-
-        <div class="label">Observações</div>
-
-        <div class="value">
-            {{ $notes }}
-        </div>
-
-    </div>
-
-</div>
-
-
-<div class="card">
-
-    <div class="card-title">
-        Serviços do orçamento
-    </div>
-
-    <table>
-
-        <thead>
+<div class="doc-section doc-header">
+    <table class="header-table">
         <tr>
-            <th>Serviço</th>
-            <th class="text-right">Qtd</th>
-            <th class="text-right">Valor</th>
-            <th class="text-right">Total</th>
+            <td class="header-left">
+                <div class="workshop-name">{{ $workshop['name'] }}</div>
+                <div class="workshop-phone">{{ $workshop['phone_number'] }}</div>
+            </td>
+            <td class="header-right">
+                <div class="doc-kicker">Orçamento</div>
+                <div class="doc-title">Diagnóstico para aprovação</div>
+            </td>
         </tr>
-        </thead>
+    </table>
+</div>
 
-        <tbody>
+    <div class="doc-section">
 
-        @php
-            $total = 0;
-        @endphp
+        <div class="section-title">
+            Cliente e veículo
+        </div>
 
-        @foreach ($services as $service)
-
-            @php
-                $line = $service['unit_price'] * $service['quantity'];
-                $total += $line;
-            @endphp
+        <table class="grid">
 
             <tr>
-
-                <td>
-                    {{ $service['service_name'] }}
-                </td>
-
-                <td class="text-right">
-                    {{ $service['quantity'] }}
-                </td>
-
-                <td class="text-right">
-                    R$ {{ number_format($service['unit_price'], 2, ',', '.') }}
-                </td>
-
-                <td class="text-right">
-                    R$ {{ number_format($line, 2, ',', '.') }}
-                </td>
-
+                <th>Cliente</th>
+                <td>{{ $customer['name'] }}</td>
+                <th>Telefone</th>
+                <td>{{ $customer['phone_number'] }}</td>
             </tr>
 
-        @endforeach
+            <tr>
+                <th>Placa</th>
+                <td>{{ $license_plate }}</td>
+                <th>Modelo</th>
+                <td>{{ $vehicle['model'] }}</td>
+            </tr>
 
-        </tbody>
+            @if(!empty($notes))
+                <tr>
+                    <th>Observações</th>
+                    <td colspan="3">{{ $notes }}</td>
+                </tr>
+            @endif
 
-    </table>
+        </table>
 
-</div>
-
-
-<div class="card total-card">
-
-    <div class="total-label">
-        VALOR TOTAL
     </div>
 
-    <div class="total-value">
-        R$ {{ number_format($total, 2, ',', '.') }}
+    <div class="doc-section">
+
+        <div class="section-title">
+            Serviços do orçamento
+        </div>
+
+        <table class="services">
+
+            <thead>
+            <tr>
+                <th>Serviço</th>
+                <th class="text-right">Qtd</th>
+                <th class="text-right">Valor</th>
+                <th class="text-right">Total</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            @php
+                $total = 0;
+            @endphp
+
+            @foreach ($services as $service)
+
+                @php
+                    $line = $service['unit_price'] * $service['quantity'];
+                    $total += $line;
+                @endphp
+
+                <tr>
+
+                    <td>
+                        {{ $service['service_name'] }}
+                    </td>
+
+                    <td class="text-right">
+                        {{ $service['quantity'] }}
+                    </td>
+
+                    <td class="text-right">
+                        R$ {{ number_format($service['unit_price'], 2, ',', '.') }}
+                    </td>
+
+                    <td class="text-right">
+                        R$ {{ number_format($line, 2, ',', '.') }}
+                    </td>
+
+                </tr>
+
+            @endforeach
+
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td colspan="3" class="text-right total-label-cell">Valor total</td>
+                <td class="text-right total-value-cell">R$ {{ number_format($total, 2, ',', '.') }}</td>
+            </tr>
+            </tfoot>
+
+        </table>
+
     </div>
 
-</div>
+    <div class="doc-section">
 
+        <div class="signatures">
 
-<div class="signatures">
+            <div class="signature">
+                <div class="signature-line">
+                    Assinatura da Oficina
+                </div>
+            </div>
 
-    <div class="signature">
+            <div class="signature">
+                <div class="signature-line">
+                    Assinatura do Cliente
+                </div>
+            </div>
 
-        <div class="signature-line">
-            Assinatura da Oficina
         </div>
 
     </div>
-
-    <div class="signature">
-
-        <div class="signature-line">
-            Assinatura do Cliente
-        </div>
-
-    </div>
-
-</div>
 
 <div class="autosy-footer">
 
@@ -334,7 +396,6 @@
     </div>
 
 </div>
-
 
 </body>
 </html>
